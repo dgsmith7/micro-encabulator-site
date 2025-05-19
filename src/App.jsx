@@ -5,7 +5,7 @@ import * as THREE from "three";
 import "./App.css";
 
 const INITIAL_DESCRIPTION =
-  "An nano-instrument currently used in the operation of microsscopic milford trenions.  It not only provides inverse reactive current, for use in unilateral phase detractors, but is also capable of automatically synchronizing cardinal grammeters.  Power is produced by the modial interaction of magneto-reluctance and capacitive diractance.";
+  "An nano-instrument currently used in the operation of microscopic milford trenions.  It not only provides inverse reactive current, for use in unilateral phase detractors, but is also capable of automatically synchronizing cardinal grammeters.  Power is produced by the modial interaction of magneto-reluctance and capacitive diractance.";
 
 const INITIAL_STOP = {
   name: "Micro-encabulator",

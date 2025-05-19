@@ -9,7 +9,7 @@ Follow these steps to run the project on your local machine:
 ### 1. Clone the Repository
 
 ```sh
-git clone https://github.com/your-username/micro-encabulator-site.git
+git clone https://github.com/dgsmith7/micro-encabulator-site.git
 cd micro-encabulator-site
 ```
 
@@ -45,25 +45,10 @@ http://YOUR_LOCAL_IP:5173
 
 Replace `YOUR_LOCAL_IP` with your computer's local network IP address.
 
-### 4. Build for Production
-
-To create an optimized production build:
-
-```sh
-npm run build
-```
-
-The output will be in the `dist` folder.
-
-### 5. Preview the Production Build
-
-```sh
-npm run preview
-```
-
 ---
 
 ## License
 
 This project is for demonstration purposes. See the `LICENSE` file for details.
+
 # micro-encabulator-site

@@ -3,6 +3,8 @@ import { Canvas, useThree } from "@react-three/fiber";
 import { OrbitControls, useGLTF, Environment } from "@react-three/drei";
 import * as THREE from "three";
 import "./App.css";
+import ModelLabel from "./components/ModelLabel";
+import TouchNavControls from "./components/TouchNavControls";
 
 const INITIAL_DESCRIPTION =
   "An nano-instrument currently used in the operation of microscopic milford trenions.  It not only provides inverse reactive current, for use in unilateral phase detractors, but is also capable of automatically synchronizing cardinal grammeters.  Power is produced by the modial interaction of magneto-reluctance and capacitive diractance.";
@@ -113,7 +115,7 @@ const getResponsiveLabelPos = (stop, size) => {
 };
 
 const MicroEncabulatorModel = React.forwardRef(function MicroEncabulatorModel(
-  { onBounds, userRotated, stop, setLoading, targetRotation, shouldAnimate },
+  { onBounds, setLoading, targetRotation, shouldAnimate },
   ref
 ) {
   const { scene } = useGLTF("/scene.gltf");
@@ -131,7 +133,7 @@ const MicroEncabulatorModel = React.forwardRef(function MicroEncabulatorModel(
       startQuat.current.copy(quat);
       targetQuat.current.copy(quat);
     }
-  }, []); // Only run on mount!
+  }, [modelRef, targetRotation]); // Add missing dependencies
   // Easing function: cubic ease-in-out
   function easeInOutCubic(t) {
     return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
@@ -207,27 +209,6 @@ function FitCameraToModel({ bounds, cameraTarget, cameraPos }) {
   return null;
 }
 
-function ModelLabel({
-  label,
-  desc,
-  isStart,
-  isPanametric,
-  modalRef,
-  modalClass,
-  labelPos,
-}) {
-  let className = "model-label-overlay";
-  if (isStart) className += " start-modal";
-  if (isPanametric) className += " panametric-modal";
-  if (modalClass) className += ` ${modalClass}`;
-  return (
-    <div className={className} ref={modalRef}>
-      <div className="model-label-title">{label}</div>
-      <div className="model-label-desc">{desc}</div>
-    </div>
-  );
-}
-
 // Easing function: cubic ease-in-out
 function easeInOutCubic(t) {
   return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
@@ -247,7 +228,6 @@ function App() {
   const stopData = STOPS[stop];
   const modalRef = useRef();
   const modelRef = useRef();
-  const [userRotated, setUserRotated] = useState(false);
   const [showCredits, setShowCredits] = useState(false);
   const [animatedCameraPos, setAnimatedCameraPos] = useState(
     STOPS[0].cameraPos
@@ -258,6 +238,29 @@ function App() {
 
   // Responsive label position for current stop
   const responsiveLabelPos = getResponsiveLabelPos(stopData, canvasSize);
+
+  // Add: Touch navigation for mobile
+  const isTouchDevice = canvasSize.width <= 1000;
+  // Touch navigation handler
+  const handleTouchNav = (direction) => {
+    if (loading) return;
+    let nextStop = stop;
+    // SWAP: 'up' now goes forward, 'down' now goes backward
+    if (direction === "up") {
+      nextStop = stop < STOPS.length - 1 ? stop + 1 : 0;
+    } else if (direction === "down") {
+      nextStop = stop > 0 ? stop - 1 : STOPS.length - 1;
+    }
+    if (nextStop !== stop) {
+      setFade(0);
+      setShouldAnimate(false);
+      setTimeout(() => {
+        setStop(nextStop);
+        setFade(1);
+        setShouldAnimate(true);
+      }, 250);
+    }
+  };
 
   // Update canvas size on resize
   useEffect(() => {
@@ -435,9 +438,7 @@ function App() {
           <directionalLight position={[5, 20, 20]} intensity={0.7} />
           <MicroEncabulatorModel
             ref={modelRef}
-            userRotated={userRotated}
             onBounds={setBounds}
-            stop={stop}
             setLoading={setLoading}
             targetRotation={stopData.rotation}
             shouldAnimate={shouldAnimate}
@@ -448,12 +449,7 @@ function App() {
             cameraPos={animatedCameraPos}
           />
           <Environment preset="city" />
-          <OrbitControls
-            enablePan={false}
-            enableZoom={false}
-            onStart={() => setUserRotated(true)}
-            onEnd={() => setUserRotated(false)}
-          />
+          <OrbitControls enablePan={false} enableZoom={false} />
         </Canvas>
         {/* Loading overlay with fade-out */}
         {loading && (
@@ -550,6 +546,8 @@ function App() {
             />
           </svg>
         )}
+        {/* Touch controls for mobile/tablet */}
+        {isTouchDevice && <TouchNavControls onNav={handleTouchNav} />}
         {/* Bottom overlays container */}
         <div className="bottom-overlays">
           <span className="scroll-hint">Scroll through demo</span>
@@ -624,243 +622,6 @@ function App() {
             </div>
           </div>
         )}
-        {/* Fade modal using opacity and transition */}
-        <style>{`
-          @import url('https://fonts.googleapis.com/css2?family=Julius+Sans+One&display=swap');
-          body, .app-container, .viewer-main {
-            background: #44484f !important;
-          }
-          .bottom-overlays {
-            position: fixed;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            width: 100vw;
-            display: flex;
-            flex-direction: row;
-            justify-content: center;
-            align-items: flex-end;
-            gap: 2.5rem;
-            z-index: 40;
-            pointer-events: none;
-            padding-bottom: 2.2rem;
-          }
-          .bottom-overlays .scroll-hint,
-          .bottom-overlays .credits-link {
-            position: static !important;
-            pointer-events: auto;
-            margin: 0 0.5em;
-            left: unset !important;
-            top: unset !important;
-          }
-          .bottom-overlays .scroll-hint {
-            font-size: 0.82rem;
-            color: #e0e0e0;
-            opacity: 0.85;
-            user-select: none;
-          }
-          .bottom-overlays .credits-link {
-            font-size: 0.82rem;
-            color: #b0e0ff;
-            text-decoration: underline;
-            cursor: pointer;
-            transition: color 0.2s;
-          }
-          .bottom-overlays .credits-link:hover {
-            color: #fff;
-          }
-          .loading-overlay {
-            /* Remove all float, margin, and padding, and force flex centering */
-            position: fixed;
-            inset: 0;
-            width: 100vw;
-            height: 100vh;
-            display: flex !important;
-            flex-direction: column !important;
-            align-items: center !important;
-            justify-content: center !important;
-            z-index: 1000;
-            background: transparent !important;
-            font-family: 'Julius Sans One', 'Tourney', sans-serif !important;
-            font-size: 1.02rem !important;
-            color: #e0e0e0 !important;
-            transition: opacity 0.5s cubic-bezier(.4,0,.2,1) !important;
-            pointer-events: auto !important;
-            box-shadow: none !important;
-            border: none !important;
-            margin: 0 !important;
-            padding: 0 !important;
-          }
-          .loading-overlay .spinner {
-            width: 2.2em;
-            height: 2.2em;
-            border: 3px solid #b0e0ff;
-            border-top: 3px solid #44484f;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 1.1em;
-          }
-          .loading-overlay .loading-text {
-            color: #e0e0e0 !important;
-            font-family: 'Julius Sans One', 'Tourney', sans-serif !important;
-            font-size: 1.02rem !important;
-            background: none !important;
-            z-index: 101;
-            text-align: center !important;
-          }
-          @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-          }
-          .model-label-overlay,
-          .model-label-overlay * {
-            font-family: 'Julius Sans One', 'Tourney', sans-serif !important;
-          }
-          .model-label-overlay {
-            opacity: ${fade};
-            transition: opacity 0.5s cubic-bezier(.4,0,.2,1);
-          }
-          .floating-title {
-            font-family: 'Julius Sans One', 'Tourney', sans-serif;
-            position: absolute;
-            left: 2rem;
-            top: 2rem;
-            z-index: 30;
-          }
-          .credits-link,
-          .scroll-hint {
-            display: inline !important;
-          }
-          .credits-modal-overlay {
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(20, 24, 32, 0.75);
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            animation: fadeIn 0.2s;
-          }
-          .credits-modal {
-            background: #23272f;
-            border-radius: 12px;
-            box-shadow: 0 4px 32px #000a;
-            padding: 2.2rem 2.5rem 1.5rem 2.5rem;
-            min-width: 340px;
-            max-width: 95vw;
-            font-family: 'Julius Sans One', 'Tourney', sans-serif;
-            color: #e0e0e0;
-            position: relative;
-            text-align: left;
-            animation: popIn 0.2s;
-          }
-          .credits-close {
-            position: absolute;
-            top: 1.1rem;
-            right: 1.5rem;
-            font-size: 1.1rem;
-            color: #b0e0ff;
-            cursor: pointer;
-            font-family: 'Julius Sans One', 'Tourney', sans-serif;
-            text-decoration: underline;
-          }
-          .credits-content a {
-            color: #b0e0ff;
-            text-decoration: underline;
-            font-family: 'Julius Sans One', 'Tourney', sans-serif;
-            font-size: 1rem;
-          }
-          .credits-content a:hover {
-            color: #fff;
-          }
-          .credits-adapted {
-            font-size: 1rem;
-            color: #b0e0ff;
-            font-family: 'Julius Sans One', 'Tourney', sans-serif;
-            margin-bottom: 0.5em;
-            margin-top: 0.2em;
-            letter-spacing: 0.01em;
-          }
-          .license-credit {
-            margin-top: 1.2em;
-            font-size: 0.95rem;
-            color: #b0e0ff;
-            line-height: 1.5;
-          }
-          .credits-blurb {
-            font-size: 1.08rem;
-            color: #e0e0e0;
-            font-family: 'Julius Sans One', 'Tourney', sans-serif;
-            margin-bottom: 1.2em;
-            letter-spacing: 0.01em;
-          }
-          .model-label-overlay.start-modal {
-            font-family: 'Julius Sans One', 'Tourney', sans-serif !important;
-            min-width: 420px;
-            max-width: 90vw;
-            padding: 2.2rem 2.8rem 2.2rem 2.8rem;
-            font-size: 1.18rem;
-            letter-spacing: 0.01em;
-            background: transparent !important;
-            border-radius: 18px;
-            box-shadow: none;
-            color: #e0e0e0;
-            text-align: center;
-            line-height: 1.6;
-          }
-          @media (max-width: 600px) {
-            .model-label-overlay {
-              font-size: 0.92rem !important;
-              min-width: 180px !important;
-              max-width: 90vw !important;
-              padding: 1.1rem 1.2rem 1.1rem 1.2rem !important;
-            }
-            .floating-title {
-              font-size: 1.1rem !important;
-              left: 1rem !important;
-              top: 1rem !important;
-            }
-            .bottom-overlays {
-              gap: 1.2rem;
-              padding-bottom: 1.1rem;
-            }
-            .bottom-overlays .scroll-hint,
-            .bottom-overlays .credits-link {
-              font-size: 0.62rem !important;
-            }
-            .credits-modal {
-              min-width: 180px !important;
-              padding: 1.1rem 1.2rem 1.1rem 1.2rem !important;
-              font-size: 0.92rem !important;
-            }
-          }
-          @media (max-width: 1000px) and (min-width: 601px) {
-            .model-label-overlay {
-              font-size: 1.02rem !important;
-              min-width: 260px !important;
-              max-width: 95vw !important;
-              padding: 1.5rem 1.7rem 1.5rem 1.7rem !important;
-            }
-            .floating-title {
-              font-size: 1.2rem !important;
-              left: 1.3rem !important;
-              top: 1.3rem !important;
-            }
-            .bottom-overlays {
-              gap: 1.8rem;
-              padding-bottom: 1.5rem;
-            }
-            .bottom-overlays .scroll-hint,
-            .bottom-overlays .credits-link {
-              font-size: 0.72rem !important;
-            }
-            .credits-modal {
-              min-width: 260px !important;
-              padding: 1.5rem 1.7rem 1.5rem 1.7rem !important;
-              font-size: 1.02rem !important;
-            }
-          }
-        `}</style>
       </main>
     </div>
   );

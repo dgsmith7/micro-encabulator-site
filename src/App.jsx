@@ -124,7 +124,7 @@ const MicroEncabulatorModel = React.forwardRef(function MicroEncabulatorModel(
   // Store current and target quaternions
   const startQuat = useRef(new THREE.Quaternion());
   const targetQuat = useRef(new THREE.Quaternion());
-  // On mount, set initial quaternion
+  // On mount, set initial quaternion only once (not on every targetRotation change)
   useEffect(() => {
     if (modelRef.current && targetRotation) {
       const euler = new THREE.Euler(...targetRotation, "XYZ");
@@ -133,15 +133,17 @@ const MicroEncabulatorModel = React.forwardRef(function MicroEncabulatorModel(
       startQuat.current.copy(quat);
       targetQuat.current.copy(quat);
     }
-  }, [modelRef, targetRotation]); // Add missing dependencies
+    // Only run on mount (scene/modelRef changes), not on every targetRotation change
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [modelRef]);
   // Easing function: cubic ease-in-out
   function easeInOutCubic(t) {
     return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
   }
-  // On targetRotation change, update target quaternion and animate
+  // Animate model rotation smoothly on targetRotation change
   useEffect(() => {
     if (!modelRef.current || !targetRotation || !shouldAnimate) return;
-    const duration = 900; // ms, adjust for slower/faster
+    const duration = 900; // ms, match camera animation
     let start = null;
     startQuat.current.copy(modelRef.current.quaternion);
     targetQuat.current.copy(

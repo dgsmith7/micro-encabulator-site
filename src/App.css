@@ -1,68 +1,60 @@
-@import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Tourney:wght@700&display=swap");
+/*
+  Cleanup: Julius Sans One for all text, no !important, modular, clean, minimal CSS.
+  - All text uses Julius Sans One
+  - No !important
+  - Touch controls and invisible modals retained
+  - Pruned, modular, and maintainable
+*/
+@import url("https://fonts.googleapis.com/css2?family=Julius+Sans+One:wght@400;700&display=swap");
+
+:root {
+  --color-bg: #44484f;
+  --color-fg: #e0e0e0;
+  --color-accent: #b0e0ff;
+  --color-title: #e9ecef;
+  --font-main: "Julius Sans One", Arial, sans-serif;
+}
 
 body,
 #root,
 .app-container {
-  font-family: "Orbitron", Arial, sans-serif;
-}
-
-body {
-  background: #44484f;
-  color: #222;
+  font-family: var(--font-main);
+  background: var(--color-bg);
+  color: var(--color-fg);
   margin: 0;
   width: 100vw;
   height: 100vh;
   overflow: hidden;
 }
 
-#root {
-  width: 100vw;
-  height: 100vh;
-  max-width: 100vw;
-  max-height: 100vh;
-  margin: 0;
-  padding: 0;
-  text-align: left;
-  position: relative;
-  overflow: hidden;
-}
-
-.app-container {
-  width: 100vw;
-  height: 100vh;
-  min-width: 100vw;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  background: #44484f;
-  position: relative;
-  overflow: hidden;
-}
-
+#root,
+.app-container,
 .viewer-main {
   width: 100vw;
   height: 100vh;
   min-width: 100vw;
   min-height: 100vh;
   display: flex;
+  flex-direction: column;
+  background: var(--color-bg);
+  position: relative;
+  overflow: hidden;
+}
+
+.viewer-main {
+  flex: 1;
   align-items: stretch;
   justify-content: stretch;
-  position: relative;
-  flex: 1;
 }
 
 canvas {
   position: absolute;
   top: 0;
   left: 0;
-  width: 100vw !important;
-  height: 100vh !important;
-  min-width: 100vw;
-  min-height: 100vh;
-  max-width: 100vw;
-  max-height: 100vh;
+  width: 100vw;
+  height: 100vh;
   border-radius: 0;
-  background: #44484f !important;
+  background: var(--color-bg);
   box-shadow: none;
   z-index: 1;
 }
@@ -72,22 +64,41 @@ canvas {
   top: 2.5rem;
   left: 2.5rem;
   z-index: 2;
-  font-family: "Tourney", Arial, sans-serif;
-  font-size: 3.8rem; /* Increased size */
+  font-family: var(--font-main);
+  font-size: 3.8rem;
   font-weight: 700;
   letter-spacing: 0.04em;
-  color: #e9ecef;
+  color: var(--color-title);
   background: none;
   pointer-events: none;
   text-shadow: 0 2px 8px rgba(40, 50, 60, 0.18);
+  max-width: 75vw;
+  width: max-content;
+  white-space: pre-line;
+  line-height: 1.1;
 }
-
-.card {
-  padding: 2em;
+@media (max-width: 1000px) {
+  .floating-title {
+    left: 4vw;
+    top: 2vw;
+    font-size: 7vw;
+    max-width: 75vw;
+    width: 70vw;
+    text-align: left;
+    white-space: normal;
+  }
 }
-
-.read-the-docs {
-  color: #888;
+@media (max-width: 600px) {
+  .floating-title {
+    left: 2vw;
+    top: 2vw;
+    font-size: 10vw;
+    max-width: 90vw;
+    width: 80vw;
+    min-width: 50vw;
+    text-align: left;
+    white-space: normal;
+  }
 }
 
 .model-label-overlay {
@@ -96,20 +107,17 @@ canvas {
   bottom: 10vh;
   transform: translateX(-50%);
   z-index: 10;
-  background: none; /* Fully transparent */
-  color: #fff;
-  padding: 0.7em 0.8em; /* Reduced padding */
+  background: none;
+  color: var(--color-fg);
+  padding: 0.7em 0.8em;
   border-radius: 12px;
-  font-family: inherit;
+  font-family: var(--font-main);
   box-shadow: none;
   min-width: 120px;
   max-width: 260px;
   text-align: center;
   pointer-events: none;
-  backdrop-filter: none;
 }
-
-/* Wider modal for the start position (Micro-encabulator) only */
 .model-label-overlay.start-modal {
   left: 50%;
   transform: translateX(-50%);
@@ -124,101 +132,242 @@ canvas {
   max-width: 100%;
   text-align: left;
 }
-
-/* Wider modal for the Panametric Fan (stop 1) */
-.model-label-overlay.panametric-modal {
-  left: auto;
-  right: 7vw;
-  bottom: 10vh;
-  transform: none;
-  min-width: 200px;
-  max-width: 340px;
-  padding: 1em 1.3em;
-}
-
-/* Wider modal for the Spurving Bearings */
-.model-label-overlay.spurving-modal {
-  left: 7vw;
-  right: auto;
-  bottom: 10vh;
-  transform: none;
-  min-width: 200px;
-  max-width: 340px;
-  padding: 1em 1.3em;
-}
-
-/* Position modal for the Hydrocoptic Marzlevanes */
-.model-label-overlay.marzlevanes-modal {
-  left: auto;
-  right: 7vw;
-  top: 20vh;
-  bottom: auto;
-  transform: none;
-  min-width: 200px;
-  max-width: 340px;
-  padding: 1em 1.3em;
-}
-
-/* Position modal for the Lotus-o-Delta Main Winding */
+.model-label-overlay.panametric-modal,
+.model-label-overlay.marzlevanes-modal,
 .model-label-overlay.lotus-modal {
-  left: auto;
   right: 7vw;
-  top: 40vh;
-  bottom: auto;
+  left: auto;
+  bottom: 10vh;
+  top: auto;
   transform: none;
   min-width: 200px;
   max-width: 340px;
   padding: 1em 1.3em;
 }
-
-/* Position modal for the Non-reversible Tremie Pipe */
-.model-label-overlay.tremie-modal {
-  left: 7vw;
-  right: auto;
-  top: 40vh;
-  bottom: auto;
-  transform: none;
-  min-width: 200px;
-  max-width: 340px;
-  padding: 1em 1.3em;
-}
-
-/* Position modal for the Cardinal Grammeters */
+.model-label-overlay.spurving-modal,
+.model-label-overlay.tremie-modal,
 .model-label-overlay.grammeters-modal {
   left: 7vw;
   right: auto;
-  top: 20vh; /* Lowered from 7vh to 13vh to appear just below the title */
-  bottom: auto;
+  bottom: 10vh;
+  top: auto;
   transform: none;
   min-width: 200px;
   max-width: 340px;
   padding: 1em 1.3em;
 }
-
 .model-label-title {
   font-weight: 700;
-  font-size: 1.1em; /* Reduced size */
+  font-size: 1.1em;
   margin-bottom: 0.2em;
-  color: #fff;
+  color: var(--color-fg);
   letter-spacing: 0.04em;
   font-family: inherit;
 }
-
 .model-label-desc {
   font-weight: 400;
-  font-size: 0.95em; /* Reduced size */
-  color: #fff;
+  font-size: 0.95em;
+  color: var(--color-fg);
   font-family: inherit;
+}
+
+.touch-nav-controls {
+  position: fixed;
+  right: 1.2rem;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  z-index: 50;
+}
+.touch-nav-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  outline: none;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: none;
+  margin: 0;
+  transition: background 0.15s;
+}
+.touch-nav-btn:active {
+  background: rgba(224, 224, 224, 0.08);
+}
+.touch-nav-btn svg {
+  display: block;
+}
+@media (min-width: 1001px) {
+  .touch-nav-controls {
+    display: none;
+  }
+}
+
+.bottom-overlays {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 2.5rem;
+  z-index: 40;
+  pointer-events: none;
+  padding-bottom: 2.2rem;
+}
+.bottom-overlays .scroll-hint,
+.bottom-overlays .credits-link {
+  pointer-events: auto;
+  margin: 0 0.5em;
+}
+.bottom-overlays .scroll-hint {
+  font-size: 0.82rem;
+  color: var(--color-fg);
+  opacity: 0.85;
+  user-select: none;
+}
+.bottom-overlays .credits-link {
+  font-size: 0.82rem;
+  color: var(--color-accent);
+  text-decoration: underline;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.bottom-overlays .credits-link:hover {
+  color: #fff;
+}
+
+.credits-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(20, 24, 32, 0.75);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.credits-modal {
+  background: #23272f;
+  border-radius: 12px;
+  box-shadow: 0 4px 32px #000a;
+  padding: 2.2rem 2.5rem 1.5rem 2.5rem;
+  min-width: 340px;
+  max-width: 95vw;
+  font-family: var(--font-main);
+  color: var(--color-fg);
+  position: relative;
+  text-align: left;
+}
+.credits-close {
+  position: absolute;
+  top: 1.1rem;
+  right: 1.5rem;
+  font-size: 1.1rem;
+  color: var(--color-accent);
+  cursor: pointer;
+  text-decoration: underline;
+}
+.credits-content a {
+  color: var(--color-accent);
+  text-decoration: underline;
+  font-size: 1rem;
+}
+.credits-content a:hover {
+  color: #fff;
+}
+.credits-adapted {
+  font-size: 1rem;
+  color: var(--color-accent);
+  margin-bottom: 0.5em;
+  margin-top: 0.2em;
+  letter-spacing: 0.01em;
+}
+.license-credit {
+  margin-top: 1.2em;
+  font-size: 0.95rem;
+  color: var(--color-accent);
+  line-height: 1.5;
+}
+.credits-blurb {
+  font-size: 1.08rem;
+  color: var(--color-fg);
+  margin-bottom: 1.2em;
+  letter-spacing: 0.01em;
 }
 
 .loading-overlay {
-  z-index: 100;
-  color: #fff;
-  font-size: 2rem;
-  background: rgba(40, 44, 52, 0.7);
-  padding: 1.5em 3em;
-  border-radius: 16px;
-  box-shadow: 0 2px 16px 0 rgba(40, 50, 60, 0.18);
-  pointer-events: none;
-  font-family: inherit;
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  background: transparent;
+  font-family: var(--font-main);
+  font-size: 1.02rem;
+  color: var(--color-fg);
+  transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: auto;
+  box-shadow: none;
+  border: none;
+  margin: 0;
+  padding: 0;
 }
+.loading-overlay .spinner {
+  width: 2.2em;
+  height: 2.2em;
+  border: 3px solid var(--color-accent);
+  border-top: 3px solid var(--color-bg);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1.1em;
+}
+.loading-overlay .loading-text {
+  color: var(--color-fg);
+  font-family: var(--font-main);
+  font-size: 1.02rem;
+  background: none;
+  z-index: 101;
+  text-align: center;
+}
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Commented out duplicate/overriding rules */
+/*
+@media (max-width: 600px) {
+  .floating-title {
+    font-size: 1.1rem;
+    left: 1rem;
+    top: 1rem;
+  }
+}
+@media (max-width: 1000px) and (min-width: 601px) {
+  .floating-title {
+    font-size: 1.2rem;
+    left: 1.3rem;
+    top: 1.3rem;
+  }
+}
+*/

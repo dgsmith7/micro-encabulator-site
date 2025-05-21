@@ -21,7 +21,11 @@ const INITIAL_STOP = {
 };
 
 const STOPS = [
-  { ...INITIAL_STOP, lineAnchor: "left" },
+  {
+    ...INITIAL_STOP,
+    lineAnchor: "left",
+    line2D: { startX: 120, startY: 400, endX: 220, endY: 300 },
+  },
   {
     name: "Panametric Fan",
     desc: "Regulates the modial interaction of magneto-reluctance and capacitive diractance, ensuring phase stability.",
@@ -31,6 +35,7 @@ const STOPS = [
     labelPos: { x: 10, y: 2, z: 0 }, // fix: move labelPos to right and up for visibility
     lineTo: { x: 2, y: 2, z: 0 },
     lineAnchor: "top",
+    line2D: { startX: 200, startY: 180, endX: 300, endY: 100 },
   },
   {
     name: "Spurving Bearings",
@@ -42,6 +47,7 @@ const STOPS = [
     lineTo: { x: 40, y: 20, z: -50 },
     modalClass: "spurving-modal",
     lineAnchor: "top",
+    line2D: { startX: 100, startY: 220, endX: 60, endY: 100 },
   },
   {
     name: "Ambifacient Lunar Waneshaft",
@@ -52,6 +58,7 @@ const STOPS = [
     labelPos: { x: -2, y: 6, z: 0 }, // fix: move labelPos up for visibility
     lineTo: { x: 80, y: 20, z: 130 },
     lineAnchor: "top",
+    line2D: { startX: 180, startY: 120, endX: 250, endY: 60 },
   },
   {
     name: "Hydrocoptic Marzlevanes",
@@ -63,6 +70,7 @@ const STOPS = [
     lineTo: { x: 0, y: -2, z: -2 },
     modalClass: "marzlevanes-modal",
     lineAnchor: "bottom",
+    line2D: { startX: 300, startY: 400, endX: 350, endY: 500 },
   },
   {
     name: "Lotus-o-Delta Main Winding",
@@ -74,6 +82,7 @@ const STOPS = [
     lineTo: { x: 2, y: 0, z: 0 },
     modalClass: "lotus-modal",
     lineAnchor: "bottom",
+    line2D: { startX: 400, startY: 300, endX: 500, endY: 350 },
   },
   {
     name: "Non-reversible Tremie Pipe",
@@ -85,6 +94,7 @@ const STOPS = [
     lineTo: { x: 1, y: -1, z: 1 },
     modalClass: "tremie-modal",
     lineAnchor: "bottom",
+    line2D: { startX: 120, startY: 500, endX: 200, endY: 600 },
   },
   {
     name: "Cardinal Grammeters",
@@ -96,6 +106,7 @@ const STOPS = [
     lineTo: { x: -50, y: -51, z: -80 },
     modalClass: "grammeters-modal",
     lineAnchor: "bottom",
+    line2D: { startX: 80, startY: 80, endX: 40, endY: 40 },
   },
 ];
 
@@ -113,6 +124,20 @@ const getResponsiveLabelPos = (stop, size) => {
     return stop.labelPos || { x: 0, y: 0, z: 0 };
   }
 };
+
+function getDeviceType() {
+  const ua = navigator.userAgent || navigator.vendor || window.opera;
+  const isMobile = /android|iphone|ipod|opera mini|iemobile|mobile/i.test(ua);
+  const isTablet = /ipad|tablet|kindle|playbook|silk/i.test(ua);
+
+  if (isMobile) return "mobile";
+  if (isTablet) return "tablet";
+  return "desktop";
+}
+
+function getOrientation(width, height) {
+  return width > height ? "l" : "p";
+}
 
 const MicroEncabulatorModel = React.forwardRef(function MicroEncabulatorModel(
   { onBounds, setLoading, targetRotation, shouldAnimate },
@@ -241,33 +266,59 @@ function App() {
   // Responsive label position for current stop
   const responsiveLabelPos = getResponsiveLabelPos(stopData, canvasSize);
 
-  // Add: Touch navigation for mobile
-  const isTouchDevice = canvasSize.width <= 1000;
-  // Touch navigation handler
+  // Add: Touch navigation for mobile/tablet
+  const deviceType = getDeviceType();
+  const orientation = getOrientation(canvasSize.width, canvasSize.height);
+  const isTouchDevice = deviceType === "mobile" || deviceType === "tablet";
+
+  // On mobile/tablet, ensure loading is false so touch nav works
+  useEffect(() => {
+    if (deviceType !== "desktop") {
+      setLoading(false);
+    }
+  }, [deviceType]);
+
+  // Determine snapshot folder
+  let snapshotFolder = null;
+  if (deviceType === "mobile") snapshotFolder = `mobile-${orientation}`;
+  else if (deviceType === "tablet") snapshotFolder = `tablet-${orientation}`;
+
+  // Compute snapshot image path
+  let snapshotImg = null;
+  if (snapshotFolder) {
+    // e.g. stop0mp.webp for mobile-p, stop0ml.webp for mobile-l, etc.
+    const stopSuffix =
+      deviceType === "mobile" ? `m${orientation}` : `t${orientation}`;
+    snapshotImg = `/snapshots/${snapshotFolder}/stop${stop}${stopSuffix}.webp`;
+  }
+
+  // Remove all fade logic: just swap images instantly on stop change
+  useEffect(() => {
+    // No fade, just swap
+  }, [stop, snapshotImg, deviceType]);
+
+  // Touch navigation handler (fix: only block nav during fade for mobile/tablet)
   const handleTouchNav = (direction) => {
-    if (loading) return;
+    if (loading) return; // Only block if loading
     let nextStop = stop;
-    // SWAP: 'up' now goes forward, 'down' now goes backward
     if (direction === "up") {
       nextStop = stop < STOPS.length - 1 ? stop + 1 : 0;
     } else if (direction === "down") {
       nextStop = stop > 0 ? stop - 1 : STOPS.length - 1;
     }
     if (nextStop !== stop) {
-      setFade(0);
-      setShouldAnimate(false);
-      setTimeout(() => {
-        setStop(nextStop);
-        setFade(1);
-        setShouldAnimate(true);
-      }, 250);
+      setStop(nextStop);
     }
   };
 
   // Update canvas size on resize
   useEffect(() => {
-    const handleResize = () =>
+    const handleResize = () => {
       setCanvasSize({ width: window.innerWidth, height: window.innerHeight });
+      // Only set loading to true if device type is changing from mobile/tablet to desktop
+      // Otherwise, keep using the model and don't trigger loading spinner
+      // (This prevents spinner on every desktop resize)
+    };
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
@@ -371,7 +422,10 @@ function App() {
 
   // Project 3D point to 2D for all stops
   let lineProps = null;
-  if (cameraObj && modalPos && stopData.lineTo) {
+  if (deviceType !== "desktop" && stopData.line2D && stop !== 0) {
+    // Use fixed 2D coordinates for mobile/tablet
+    lineProps = stopData.line2D;
+  } else if (cameraObj && modalPos && stopData.lineTo) {
     const screen = project3DToScreen(
       new THREE.Vector3(
         stopData.lineTo.x,
@@ -412,89 +466,184 @@ function App() {
   return (
     <div className="app-container">
       <main className="viewer-main">
-        <Canvas
-          camera={{
-            position: [-200, 0, 0], // Zoom out much further
-            fov: 45,
-            near: 0.1,
-            far: 5000, // Increase far plane for safety
-          }}
-          shadows
-          style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            width: "100vw",
-            height: "100vh",
-          }}
-          onCreated={({ camera, size }) => {
-            setCameraObj(camera);
-            setCanvasSize({ width: size.width, height: size.height });
-          }}
-          onResize={({ size }) =>
-            setCanvasSize({ width: size.width, height: size.height })
-          }
-        >
-          <color attach="background" args={["#44484f"]} />
-          <ambientLight intensity={0.7} />
-          <directionalLight position={[5, 20, 20]} intensity={0.7} />
-          <MicroEncabulatorModel
-            ref={modelRef}
-            onBounds={setBounds}
-            setLoading={setLoading}
-            targetRotation={stopData.rotation}
-            shouldAnimate={shouldAnimate}
-          />
-          <FitCameraToModel
-            bounds={bounds}
-            cameraTarget={animatedCameraTarget}
-            cameraPos={animatedCameraPos}
-          />
-          <Environment preset="city" />
-          <OrbitControls enablePan={false} enableZoom={false} />
-        </Canvas>
-        {/* Loading overlay with fade-out */}
-        {loading && (
+        {/* Progressive enhancement: show sequential fade out, then fade in new image for mobile/tablet */}
+        {deviceType !== "desktop" && snapshotImg ? (
           <div
-            className="loading-overlay"
+            className="snapshot-crossfade"
             style={{
-              opacity: fade,
-              pointerEvents: fade === 0 ? "none" : "auto",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-              position: "fixed",
-              inset: 0,
+              position: "relative",
               width: "100vw",
               height: "100vh",
-              zIndex: 1000,
-              background: "transparent",
-              fontFamily: "'Julius Sans One', 'Tourney', sans-serif",
-              fontSize: "1.02rem",
-              color: "#e0e0e0",
-              transition: "opacity 0.5s cubic-bezier(.4,0,.2,1)",
-              margin: 0,
-              padding: 0,
+              background: "#44484f", // match your 3D background
             }}
           >
-            <span className="spinner" style={{ marginBottom: "1.1em" }}></span>
-            <span
-              className="loading-text"
-              style={{
-                color: "#e0e0e0",
-                fontFamily: "'Julius Sans One', 'Tourney', sans-serif",
-                fontSize: "1.02rem",
-                background: "none",
-                zIndex: 101,
-                textAlign: "center",
-              }}
-            >
-              Loading...
-            </span>
+            {snapshotImg && (
+              <img
+                src={snapshotImg}
+                alt=""
+                style={{
+                  position: "absolute",
+                  left: 0,
+                  top: 0,
+                  width: "100vw",
+                  height: "100vh",
+                  objectFit: "cover",
+                  zIndex: 3,
+                  pointerEvents: "none",
+                }}
+              />
+            )}
+            {/* SVG lines overlay, always above images */}
+            {lineProps && stop !== 0 && (
+              <svg
+                style={{
+                  position: "absolute",
+                  left: 0,
+                  top: 0,
+                  width: "100vw",
+                  height: "100vh",
+                  pointerEvents: "none",
+                  zIndex: 10001, // above images and overlays
+                }}
+                width="100vw"
+                height="100vh"
+              >
+                <line
+                  x1={lineProps.startX}
+                  y1={lineProps.startY}
+                  x2={lineProps.endX}
+                  y2={lineProps.endY}
+                  stroke="#fff"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                />
+                <circle
+                  cx={lineProps.startX}
+                  cy={lineProps.startY}
+                  r="3"
+                  fill="#fff"
+                  stroke="#fff"
+                  strokeWidth="1.2"
+                />
+                <circle
+                  cx={lineProps.endX}
+                  cy={lineProps.endY}
+                  r="3"
+                  fill="#fff"
+                  stroke="#fff"
+                  strokeWidth="1.2"
+                />
+              </svg>
+            )}
+          </div>
+        ) : deviceType !== "desktop" && !snapshotImg ? (
+          <div style={{ color: "#fff", textAlign: "center", marginTop: "2em" }}>
+            No image available for this device/stop.
+          </div>
+        ) : (
+          <Canvas
+            camera={{
+              position: [-200, 0, 0],
+              fov: 45,
+              near: 0.1,
+              far: 5000,
+            }}
+            shadows
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "100vw",
+              height: "100vh",
+            }}
+            onCreated={({ camera, size }) => {
+              setCameraObj(camera);
+              setCanvasSize({ width: size.width, height: size.height });
+            }}
+            onResize={({ size }) =>
+              setCanvasSize({ width: size.width, height: size.height })
+            }
+          >
+            <color attach="background" args={["#44484f"]} />
+            <ambientLight intensity={0.7} />
+            <directionalLight position={[5, 20, 20]} intensity={0.7} />
+            <MicroEncabulatorModel
+              ref={modelRef}
+              onBounds={setBounds}
+              setLoading={setLoading}
+              targetRotation={stopData.rotation}
+              shouldAnimate={shouldAnimate}
+            />
+            <FitCameraToModel
+              bounds={bounds}
+              cameraTarget={animatedCameraTarget}
+              cameraPos={animatedCameraPos}
+            />
+            <Environment preset="city" />
+            <OrbitControls enablePan={false} enableZoom={false} />
+          </Canvas>
+        )}
+        {/* Loading spinner overlay: only show when loading is true */}
+        {loading && (
+          <div className="loading-overlay">
+            <div className="spinner" />
+            <div className="loading-text">Loading 3D model...</div>
           </div>
         )}
-        <span className="floating-title">Micro-encabulator</span>
+        {/* Title and overlays: always together and centered beneath title on all devices */}
+        <div
+          className="title-and-overlays"
+          style={{
+            position: "fixed",
+            left: 0,
+            right: 0,
+            top: 0,
+            zIndex: 3000,
+            pointerEvents: "none",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            marginTop: 0,
+          }}
+        >
+          <span
+            className="floating-title"
+            style={{
+              display: "block",
+              textAlign: "center",
+              marginTop: 0,
+              pointerEvents: "auto",
+              fontSize: "2.1rem",
+              fontWeight: 700,
+              letterSpacing: "0.01em",
+            }}
+          >
+            Micro-encabulator
+          </span>
+          <div
+            className="top-overlays"
+            style={{
+              textAlign: "center",
+              pointerEvents: "auto",
+              background: "none",
+              marginTop: 8,
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "center",
+              gap: 16,
+            }}
+          >
+            <span className="scroll-hint">Scroll through demo</span>
+            <span
+              className="credits-link"
+              style={{ marginLeft: 16, cursor: "pointer" }}
+              onClick={() => setShowCredits(true)}
+            >
+              credits
+            </span>
+          </div>
+        </div>
+        {/* Model label overlay */}
         <ModelLabel
           label={stopData.name}
           desc={stopData.desc}
@@ -504,18 +653,19 @@ function App() {
           modalClass={modalClass}
           labelPos={responsiveLabelPos}
         />
-        {lineProps && stop !== 0 && (
+        {/* SVG lines overlay for desktop (already handled above for mobile/tablet) */}
+        {deviceType === "desktop" && lineProps && stop !== 0 && (
           <svg
             style={{
               position: "fixed",
               left: 0,
               top: 0,
               pointerEvents: "none",
-              zIndex: 20,
+              zIndex: 10001, // higher than overlays
               width: "100vw",
               height: "100vh",
               opacity: fade,
-              transition: "opacity 0.5s cubic-bezier(.4,0,.2,1)",
+              transition: "opacity 1.5s cubic-bezier(.4,0,.2,1)",
             }}
             width="100vw"
             height="100vh"
@@ -529,7 +679,6 @@ function App() {
               strokeWidth="2.5"
               strokeLinecap="round"
             />
-            {/* Add a small white dot at each end of the line (radius 3) */}
             <circle
               cx={lineProps.startX}
               cy={lineProps.startY}
@@ -548,18 +697,28 @@ function App() {
             />
           </svg>
         )}
-        {/* Touch controls for mobile/tablet */}
-        {isTouchDevice && <TouchNavControls onNav={handleTouchNav} />}
-        {/* Bottom overlays container */}
-        <div className="bottom-overlays">
-          <span className="scroll-hint">Scroll through demo</span>
-          <span className="credits-link" onClick={() => setShowCredits(true)}>
-            credits
-          </span>
-        </div>
+        {/* Touch controls for mobile/tablet: always above overlays and modal */}
+        {isTouchDevice && (
+          <div
+            style={{
+              position: "fixed",
+              left: 0,
+              right: 0,
+              bottom: 0,
+              zIndex: 4000,
+              pointerEvents: "none",
+            }}
+          >
+            <div style={{ pointerEvents: "auto" }}>
+              <TouchNavControls onNav={handleTouchNav} />
+            </div>
+          </div>
+        )}
+        {/* Bottom overlays container (fix z-index: always above modal overlay) */}
         {showCredits && (
           <div
             className="credits-modal-overlay"
+            style={{ zIndex: 2000 }}
             onClick={() => setShowCredits(false)}
           >
             <div className="credits-modal" onClick={(e) => e.stopPropagation()}>

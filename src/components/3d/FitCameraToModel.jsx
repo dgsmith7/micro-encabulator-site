@@ -3,9 +3,8 @@ import { useThree } from "@react-three/fiber";
 import * as THREE from "three";
 
 /**
- * Component that adjusts the camera to fit the 3D model.
- * It ensures the camera is outside the model's bounding sphere
- * and points at the desired target.
+ * Adjusts the camera to fit the 3D model's bounding sphere and look at the target.
+ * Ensures the camera is always outside the model for a good view.
  */
 function FitCameraToModel({ bounds, cameraTarget, cameraPos }) {
   const { camera, controls } = useThree();

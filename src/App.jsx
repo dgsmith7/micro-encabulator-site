@@ -20,6 +20,10 @@ import CreditsModal from "./components/CreditsModal";
 import SVGLines from "./components/SVGLines";
 import SnapshotDisplay from "./components/SnapshotDisplay";
 
+/**
+ * Main application component for the Micro-encabulator interactive site.
+ * Handles 3D model, snapshot mode, navigation, overlays, and responsive logic.
+ */
 function App() {
   const [stop, setStop] = useState(0);
   const [bounds, setBounds] = useState(null);
@@ -66,17 +70,17 @@ function App() {
   // Responsive label position for current stop
   const responsiveLabelPos = getResponsiveLabelPos(stopData, canvasSize);
 
-  // Add: Touch navigation for mobile/tablet
+  // Device and orientation detection
   const deviceType = getDeviceType();
   const orientation = getOrientation(canvasSize.width, canvasSize.height);
 
-  // Force show touch controls if device has touch capability OR deviceType is mobile/tablet
+  // Touch device detection for navigation and snapshot mode
   const isTouch = "ontouchstart" in window || navigator.maxTouchPoints > 0;
   const isTouchDevice =
     deviceType === "mobile" || deviceType === "tablet" || isTouch;
   const useSnapshotsOnly = isTouchDevice;
 
-  // Log device info to help with debugging
+  // Log device info for debugging
   useEffect(() => {
     console.log("App detected:", {
       deviceType,
@@ -94,15 +98,13 @@ function App() {
     }
   }, [useSnapshotsOnly]);
 
-  // Determine snapshot folder
+  // Determine snapshot folder and image path for current stop
   let snapshotFolder = null;
   if (deviceType === "mobile") snapshotFolder = `mobile-${orientation}`;
   else if (deviceType === "tablet") snapshotFolder = `tablet-${orientation}`;
 
-  // Compute snapshot image path
   let snapshotImg = null;
   if (snapshotFolder) {
-    // e.g. stop0mp.webp for mobile-p, stop0ml.webp for mobile-l, etc.
     const stopSuffix =
       deviceType === "mobile" ? `m${orientation}` : `t${orientation}`;
     snapshotImg = `/snapshots/${snapshotFolder}/stop${stop}${stopSuffix}.webp`;
@@ -121,7 +123,7 @@ function App() {
 
   // Touch navigation handler (with crossfade)
   const handleTouchNav = (direction) => {
-    if (loading || crossfade.fading) return; // Block during fade
+    if (loading || crossfade.fading) return;
     let nextStop = stop;
     if (direction === "up") {
       nextStop = stop < STOPS.length - 1 ? stop + 1 : 0;
@@ -139,7 +141,6 @@ function App() {
           deviceType === "mobile" ? `m${orientation}` : `t${orientation}`;
         const nextImg = `/snapshots/${nextFolder}/stop${nextStop}${nextSuffix}.webp`;
 
-        // First stage: fade out current image only
         setCrossfade({
           prevImg: snapshotImg,
           nextImg: nextImg,
@@ -147,56 +148,51 @@ function App() {
           direction,
         });
 
-        // After current image fades out, switch to next image
         setTimeout(() => {
           setStop(nextStop);
-          // Small delay before starting fade-in of new image
           setTimeout(() => {
             setCrossfade((prev) => ({
               ...prev,
               fading: false,
               prevImg: null,
             }));
-          }, 50); // Small delay for better visual separation
-        }, 400); // Matches CSS transition duration
+          }, 50);
+        }, 400);
       } else {
         setStop(nextStop);
       }
     }
   };
 
-  // Update canvas size on resize
+  // Update canvas size on window resize
   useEffect(() => {
     const handleResize = () => {
       setCanvasSize({ width: window.innerWidth, height: window.innerHeight });
-      // Only set loading to true if device type is changing from mobile/tablet to desktop
-      // Otherwise, keep using the model and don't trigger loading spinner
-      // (This prevents spinner on every desktop resize)
     };
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Fade logic on scroll
+  // Fade logic on scroll: fade out, change stop, fade in
   useEffect(() => {
     let timeout;
     const onWheel = (e) => {
-      e.preventDefault(); // Prevent default scroll behavior
+      e.preventDefault();
       if (loading) return;
       let nextStop = stop;
       if (e.deltaY > 0) {
-        nextStop = stop < STOPS.length - 1 ? stop + 1 : 0; // loop to start
+        nextStop = stop < STOPS.length - 1 ? stop + 1 : 0;
       } else if (e.deltaY < 0) {
-        nextStop = stop > 0 ? stop - 1 : STOPS.length - 1; // loop to end
+        nextStop = stop > 0 ? stop - 1 : STOPS.length - 1;
       }
       if (nextStop !== stop) {
-        setFade(0); // fade out
-        setShouldAnimate(false); // Prevent animation during fade out
+        setFade(0);
+        setShouldAnimate(false);
         timeout = setTimeout(() => {
           setStop(nextStop);
-          setFade(1); // fade in
-          setShouldAnimate(true); // Start animation after fade in
-        }, 250); // fade out duration
+          setFade(1);
+          setShouldAnimate(true);
+        }, 250);
       }
     };
     window.addEventListener("wheel", onWheel, { passive: false });
@@ -206,9 +202,9 @@ function App() {
     };
   }, [stop, loading]);
 
-  // Animate camera position and target when stop changes
+  // Animate camera position and target on stop change
   useEffect(() => {
-    const duration = 900; // ms, match model rotation duration
+    const duration = 900;
     const startPos = animatedCameraPos.slice();
     const endPos = stopData.cameraPos.slice();
     const startTarget = animatedCameraTarget.slice();
@@ -248,7 +244,7 @@ function App() {
     stopData.cameraTarget,
   ]);
 
-  // Get modal position
+  // Get modal position for overlay line calculation
   const [modalPos, setModalPos] = useState(null);
   useLayoutEffect(() => {
     if (modalRef.current) {
@@ -262,10 +258,9 @@ function App() {
     }
   }, [stop, canvasSize]);
 
-  // Project 3D point to 2D for all stops
+  // Calculate lineProps for SVG overlay (desktop) or use 2D for mobile/tablet
   let lineProps = null;
   if (deviceType !== "desktop" && stopData.line2D && stop !== 0) {
-    // Use fixed 2D coordinates for mobile/tablet
     lineProps = stopData.line2D;
   } else if (cameraObj && modalPos && stopData.lineTo) {
     const screen = project3DToScreen(
@@ -294,7 +289,6 @@ function App() {
         startY = modalPos.y + modalPos.height / 2;
         break;
       default:
-        // Center (current behavior)
         break;
     }
     const endX = screen.x;
@@ -325,7 +319,7 @@ function App() {
             lineProps={lineProps}
           />
         ) : deviceType !== "desktop" && !snapshotImg ? (
-          <div style={{ color: "#fff", textAlign: "center", marginTop: "2em" }}>
+          <div className="no-image-available">
             No image available for this device/stop.
           </div>
         ) : (
@@ -337,13 +331,7 @@ function App() {
               far: 5000,
             }}
             shadows
-            style={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              width: "100vw",
-              height: "100vh",
-            }}
+            className="canvas"
             onCreated={({ camera, size }) => {
               setCameraObj(camera);
               setCanvasSize({ width: size.width, height: size.height });
@@ -379,54 +367,11 @@ function App() {
           </div>
         )}
         {/* Title and overlays: always together and centered beneath title on all devices */}
-        <div
-          className="title-and-overlays"
-          style={{
-            position: "fixed",
-            left: 0,
-            right: 0,
-            top: 0,
-            zIndex: 3000,
-            pointerEvents: "none",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            marginTop: 0,
-          }}
-        >
-          <span
-            className="floating-title"
-            style={{
-              display: "block",
-              textAlign: "center",
-              marginTop: 0,
-              pointerEvents: "auto",
-              fontSize: "2.1rem",
-              fontWeight: 700,
-              letterSpacing: "0.01em",
-            }}
-          >
-            Micro-encabulator
-          </span>
-          <div
-            className="top-overlays"
-            style={{
-              textAlign: "center",
-              pointerEvents: "auto",
-              background: "none",
-              marginTop: 8,
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "center",
-              gap: 16,
-            }}
-          >
+        <div className="title-and-overlays">
+          <span className="floating-title">Micro-encabulator</span>
+          <div className="top-overlays">
             <span className="scroll-hint">Scroll through demo</span>
-            <span
-              className="credits-link"
-              style={{ marginLeft: 16, cursor: "pointer" }}
-              onClick={() => setShowCredits(true)}
-            >
+            <span className="credits-link" onClick={() => setShowCredits(true)}>
               credits
             </span>
           </div>
@@ -455,28 +400,8 @@ function App() {
         )}
         {/* Touch controls for mobile/tablet: always above overlays and modal */}
         {isTouchDevice && (
-          <div
-            style={{
-              position: "fixed",
-              left: 0,
-              right: 0,
-              bottom: 0,
-              zIndex: 10000, // Highest z-index to ensure visibility
-              pointerEvents: "none",
-              width: "100%",
-              height: "100%",
-            }}
-          >
-            <div
-              style={{
-                pointerEvents: "auto",
-                position: "absolute",
-                right: "1.5rem",
-                top: "50%",
-                transform: "translateY(-50%)",
-                filter: "drop-shadow(0px 0px 5px rgba(0,0,0,0.5))",
-              }}
-            >
+          <div className="touch-controls-outer">
+            <div className="touch-controls-inner">
               <TouchNavControls onNav={handleTouchNav} />
             </div>
           </div>

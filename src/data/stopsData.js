@@ -1,6 +1,6 @@
 /**
- * This file contains all the stop points data for the Micro-encabulator tour.
- * Each stop defines the camera position, rotation, label positions and other visualization parameters.
+ * This file defines all stop points for the Micro-encabulator tour.
+ * Each stop includes camera, label, and line data for the UI.
  */
 
 const INITIAL_DESCRIPTION =

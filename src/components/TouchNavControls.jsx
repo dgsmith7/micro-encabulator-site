@@ -1,6 +1,7 @@
 import React from "react";
 import "../App.css";
 
+// Touch navigation controls for mobile/tablet: up/down buttons trigger navigation
 export default function TouchNavControls({ onNav }) {
   return (
     <div className="touch-nav-controls">
@@ -9,6 +10,7 @@ export default function TouchNavControls({ onNav }) {
         aria-label="Previous"
         onClick={() => onNav("up")}
       >
+        {/* Up arrow icon */}
         <svg
           width="28"
           height="28"
@@ -31,6 +33,7 @@ export default function TouchNavControls({ onNav }) {
         aria-label="Next"
         onClick={() => onNav("down")}
       >
+        {/* Down arrow icon */}
         <svg
           width="28"
           height="28"

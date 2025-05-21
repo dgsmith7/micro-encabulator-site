@@ -1,12 +1,13 @@
 import React from "react";
 
 /**
- * Component for rendering the connecting lines between labels and model parts.
- * Used in both desktop and mobile/tablet views.
+ * Renders a connecting SVG line and endpoints between a label/modal and a model part.
+ * Used for both desktop and mobile/tablet overlays.
  */
 function SVGLines({ lineProps, visible = true, opacity = 1, isFixed = false }) {
   if (!lineProps) return null;
 
+  // SVG is positioned absolutely or fixed, overlays the viewport
   const baseStyle = {
     position: isFixed ? "fixed" : "absolute",
     left: 0,

@@ -150,10 +150,34 @@ canvas {
 }
 @media (max-width: 600px) and (orientation: landscape) {
   .model-label-overlay {
-    bottom: 2vh; /* Move label higher up from bottom */
-    max-width: 90vw;
-    font-size: 0.95em;
-    padding: 0.6em 0.5em;
+    bottom: 120px; /* Position even higher from bottom */
+    max-width: 80vw;
+    font-size: 0.85em;
+    padding: 0.5em 0.5em;
+    max-height: 35vh; /* Limit height to prevent overflow */
+    overflow-y: auto; /* Allow scrolling if content is too tall */
+    background: none; /* No background */
+    z-index: 999 !important; /* Ensure visibility */
+    display: block !important; /* Force display */
+    opacity: 1 !important;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9); /* Stronger text shadow for readability */
+  }
+
+  /* Make labels for the specific parts more compact */
+  .model-label-overlay.panametric-modal,
+  .model-label-overlay.marzlevanes-modal,
+  .model-label-overlay.lotus-modal,
+  .model-label-overlay.spurving-modal,
+  .model-label-overlay.tremie-modal,
+  .model-label-overlay.grammeters-modal {
+    bottom: 120px;
+    padding: 0.5em 0.8em;
+    max-width: 45vw;
+    font-size: 0.8em;
+    display: block !important;
+    background: none;
+    border-radius: 8px;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
   }
 }
 .model-label-overlay.start-modal {
@@ -194,6 +218,35 @@ canvas {
   max-width: 340px;
   padding: 1em 1.3em;
 }
+
+/* Specific adjustments for landscape mode */
+@media (orientation: landscape) and (max-height: 500px) {
+  .model-label-overlay.panametric-modal,
+  .model-label-overlay.marzlevanes-modal,
+  .model-label-overlay.lotus-modal,
+  .model-label-overlay.spurving-modal,
+  .model-label-overlay.tremie-modal,
+  .model-label-overlay.grammeters-modal {
+    bottom: 120px !important;
+    max-height: 70vh;
+    overflow-y: auto;
+    background: none;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+    z-index: 2000 !important;
+    display: block !important;
+    opacity: 1 !important;
+  }
+
+  /* Special handling for start modal in landscape */
+  .model-label-overlay.start-modal {
+    bottom: 120px !important;
+    max-height: 160px;
+    overflow-y: auto;
+    padding: 1em 1.5em;
+    max-width: 80vw;
+    z-index: 2000 !important;
+  }
+}
 .model-label-title {
   font-weight: 700;
   font-size: 1.1em;
@@ -209,41 +262,85 @@ canvas {
   font-family: inherit;
 }
 
+/* Specific styles for mobile landscape */
+.model-label-overlay.landscape-mobile {
+  bottom: 120px !important; /* Position higher from bottom */
+  max-height: 120px;
+  overflow-y: auto;
+  font-size: 0.8em;
+  max-width: 45vw;
+  padding: 0.6em 0.8em;
+  display: block !important; /* Ensure it's visible */
+  opacity: 1 !important;
+  z-index: 2000 !important; /* Higher z-index to ensure visibility */
+  background: none; /* No background */
+  border-radius: 8px;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9); /* Stronger text shadow for better readability */
+}
+
+/* Make title smaller in landscape on small screens */
+.model-label-overlay.landscape-mobile .model-label-title {
+  font-size: 0.95em;
+  margin-bottom: 0.1em;
+}
+
+.model-label-overlay.landscape-mobile .model-label-desc {
+  font-size: 0.85em;
+  line-height: 1.3;
+}
+
+/* When the overlay is in landscape mode and is the start modal, adjust it further */
+.model-label-overlay.landscape-mobile.start-modal {
+  max-height: 140px;
+  max-width: 80vw;
+}
+
 .touch-nav-controls {
-  position: fixed;
-  right: 1.2rem;
-  top: 50%;
-  transform: translateY(-50%);
   display: flex;
   flex-direction: column;
-  gap: 1.2rem;
-  z-index: 50;
+  gap: 1rem; /* Slightly reduced gap */
+  z-index: 10001; /* Extremely high z-index to ensure visibility */
+  background: none; /* Removed semi-transparent background */
+  padding: 8px; /* Slightly smaller padding */
+  border-radius: 30px;
 }
+
+/* Touch hint removed for cleaner interface */
 .touch-nav-btn {
-  background: none;
-  border: none;
+  background: rgba(255, 255, 255, 0.05); /* Almost transparent background */
+  border: 1.5px solid rgba(255, 255, 255, 0.9); /* Slightly thinner border, slightly transparent */
   padding: 0;
   cursor: pointer;
   outline: none;
   border-radius: 50%;
-  width: 48px;
-  height: 48px;
+  width: 46px; /* Smaller for minimalist look */
+  height: 46px; /* Smaller for minimalist look */
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: none;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); /* Lighter shadow */
   margin: 0;
-  transition: background 0.15s;
+  transition: all 0.15s ease;
 }
 .touch-nav-btn:active {
-  background: rgba(224, 224, 224, 0.08);
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(0.95);
 }
 .touch-nav-btn svg {
   display: block;
+  width: 28px;
+  height: 28px;
 }
 @media (min-width: 1001px) {
+  /* Only hide touch controls on desktop without touch */
   .touch-nav-controls {
     display: none;
+  }
+  /* But show them if touch is available (even on desktop) */
+  @media (pointer: coarse) {
+    .touch-nav-controls {
+      display: flex !important;
+    }
   }
 }
 
@@ -394,6 +491,7 @@ canvas {
   background: var(--color-bg);
   overflow: hidden;
   z-index: 2;
+  pointer-events: none; /* Allow clicks to pass through to controls */
 }
 .snapshot-img {
   position: absolute;

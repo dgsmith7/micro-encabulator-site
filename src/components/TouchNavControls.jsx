@@ -16,17 +16,9 @@ export default function TouchNavControls({ onNav }) {
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
         >
-          <circle
-            cx="14"
-            cy="14"
-            r="13"
-            stroke="#e0e0e0"
-            strokeWidth="2"
-            fill="none"
-          />
           <polyline
             points="9,16 14,11 19,16"
-            stroke="#e0e0e0"
+            stroke="rgba(255, 255, 255, 0.9)"
             strokeWidth="2.2"
             fill="none"
             strokeLinecap="round"
@@ -46,17 +38,9 @@ export default function TouchNavControls({ onNav }) {
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
         >
-          <circle
-            cx="14"
-            cy="14"
-            r="13"
-            stroke="#e0e0e0"
-            strokeWidth="2"
-            fill="none"
-          />
           <polyline
             points="9,12 14,17 19,12"
-            stroke="#e0e0e0"
+            stroke="rgba(255, 255, 255, 0.9)"
             strokeWidth="2.2"
             fill="none"
             strokeLinecap="round"

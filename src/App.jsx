@@ -126,9 +126,29 @@ const getResponsiveLabelPos = (stop, size) => {
 };
 
 function getDeviceType() {
+  // Check for iPad specifically since newer iPads may not show up in user agent
   const ua = navigator.userAgent || navigator.vendor || window.opera;
-  const isMobile = /android|iphone|ipod|opera mini|iemobile|mobile/i.test(ua);
-  const isTablet = /ipad|tablet|kindle|playbook|silk/i.test(ua);
+  const platform = (navigator.platform || "").toLowerCase();
+  const isMacOS = platform.startsWith("mac");
+
+  // Use user agent detection first
+  const isMobileUA = /android|iphone|ipod|opera mini|iemobile|mobile/i.test(ua);
+  const isTabletUA = /ipad|tablet|kindle|playbook|silk/i.test(ua);
+
+  // Then check screen size as a fallback
+  const isTouch = "ontouchstart" in window || navigator.maxTouchPoints > 0;
+  const screenWidth = window.screen.width;
+  const screenHeight = window.screen.height;
+  const smallerDimension = Math.min(screenWidth, screenHeight);
+  const largerDimension = Math.max(screenWidth, screenHeight);
+
+  // iPad detection: either in UA or MacOS + touch + tablet-like dimensions
+  const isTablet =
+    isTabletUA ||
+    (isMacOS && isTouch && smallerDimension >= 768 && largerDimension <= 1366);
+
+  // Phone detection: either in UA or touch + phone-like dimensions
+  const isMobile = isMobileUA || (isTouch && smallerDimension < 768);
 
   if (isMobile) return "mobile";
   if (isTablet) return "tablet";
@@ -252,6 +272,12 @@ function App() {
   });
   const [fade, setFade] = useState(1); // 1 = visible, 0 = hidden
   const [shouldAnimate, setShouldAnimate] = useState(false);
+  const [crossfade, setCrossfade] = useState({
+    prevImg: null,
+    nextImg: null,
+    fading: false,
+    direction: null,
+  });
   const stopData = STOPS[stop];
   const modalRef = useRef();
   const modelRef = useRef();
@@ -270,13 +296,14 @@ function App() {
   const deviceType = getDeviceType();
   const orientation = getOrientation(canvasSize.width, canvasSize.height);
   const isTouchDevice = deviceType === "mobile" || deviceType === "tablet";
+  const useSnapshotsOnly = isTouchDevice;
 
-  // On mobile/tablet, ensure loading is false so touch nav works
+  // Never show loading spinner for snapshot mode
   useEffect(() => {
-    if (deviceType !== "desktop") {
+    if (useSnapshotsOnly) {
       setLoading(false);
     }
-  }, [deviceType]);
+  }, [useSnapshotsOnly]);
 
   // Determine snapshot folder
   let snapshotFolder = null;
@@ -292,14 +319,20 @@ function App() {
     snapshotImg = `/snapshots/${snapshotFolder}/stop${stop}${stopSuffix}.webp`;
   }
 
-  // Remove all fade logic: just swap images instantly on stop change
+  // Crossfade logic for mobile/tablet
   useEffect(() => {
-    // No fade, just swap
-  }, [stop, snapshotImg, deviceType]);
+    if (deviceType === "desktop") return;
+    setCrossfade((prev) => ({
+      prevImg: prev.nextImg || snapshotImg,
+      nextImg: snapshotImg,
+      fading: false,
+      direction: null,
+    }));
+  }, [deviceType, orientation, snapshotImg]);
 
-  // Touch navigation handler (fix: only block nav during fade for mobile/tablet)
+  // Touch navigation handler (with crossfade)
   const handleTouchNav = (direction) => {
-    if (loading) return; // Only block if loading
+    if (loading || crossfade.fading) return; // Block during fade
     let nextStop = stop;
     if (direction === "up") {
       nextStop = stop < STOPS.length - 1 ? stop + 1 : 0;
@@ -307,7 +340,32 @@ function App() {
       nextStop = stop > 0 ? stop - 1 : STOPS.length - 1;
     }
     if (nextStop !== stop) {
-      setStop(nextStop);
+      if (deviceType !== "desktop") {
+        // Start crossfade
+        const nextFolder =
+          deviceType === "mobile"
+            ? `mobile-${orientation}`
+            : `tablet-${orientation}`;
+        const nextSuffix =
+          deviceType === "mobile" ? `m${orientation}` : `t${orientation}`;
+        const nextImg = `/snapshots/${nextFolder}/stop${nextStop}${nextSuffix}.webp`;
+        setCrossfade({
+          prevImg: snapshotImg,
+          nextImg,
+          fading: true,
+          direction,
+        });
+        setTimeout(() => {
+          setStop(nextStop);
+          setCrossfade((prev) => ({
+            ...prev,
+            fading: false,
+            prevImg: null,
+          }));
+        }, 600); // match CSS transition
+      } else {
+        setStop(nextStop);
+      }
     }
   };
 
@@ -466,31 +524,23 @@ function App() {
   return (
     <div className="app-container">
       <main className="viewer-main">
-        {/* Progressive enhancement: show sequential fade out, then fade in new image for mobile/tablet */}
-        {deviceType !== "desktop" && snapshotImg ? (
-          <div
-            className="snapshot-crossfade"
-            style={{
-              position: "relative",
-              width: "100vw",
-              height: "100vh",
-              background: "#44484f", // match your 3D background
-            }}
-          >
-            {snapshotImg && (
+        {/* Snapshots for mobile/tablet, 3D model for desktop */}
+        {useSnapshotsOnly ? (
+          <div className="snapshot-crossfade">
+            {/* Previous image (fade out) */}
+            {crossfade.fading && crossfade.prevImg && (
               <img
-                src={snapshotImg}
+                src={crossfade.prevImg}
                 alt=""
-                style={{
-                  position: "absolute",
-                  left: 0,
-                  top: 0,
-                  width: "100vw",
-                  height: "100vh",
-                  objectFit: "cover",
-                  zIndex: 3,
-                  pointerEvents: "none",
-                }}
+                className={`snapshot-img${crossfade.fading ? " fade-out" : ""}`}
+              />
+            )}
+            {/* Next image (fade in) */}
+            {crossfade.nextImg && (
+              <img
+                src={crossfade.nextImg}
+                alt=""
+                className={`snapshot-img${crossfade.fading ? " fade-in" : ""}`}
               />
             )}
             {/* SVG lines overlay, always above images */}

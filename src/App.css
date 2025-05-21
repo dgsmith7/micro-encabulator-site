@@ -59,10 +59,9 @@ canvas {
   z-index: 1;
 }
 
+/* --- Fix floating-title for flexbox stacking --- */
 .floating-title {
-  position: absolute;
-  top: 2.5rem;
-  left: 2.5rem;
+  position: static; /* Remove absolute positioning */
   z-index: 2;
   font-family: var(--font-main);
   font-size: 3.8rem;
@@ -76,29 +75,58 @@ canvas {
   width: max-content;
   white-space: pre-line;
   line-height: 1.1;
+  text-align: center;
+  margin: 0 auto;
 }
 @media (max-width: 1000px) {
   .floating-title {
-    left: 4vw;
-    top: 2vw;
     font-size: 7vw;
     max-width: 75vw;
     width: 70vw;
-    text-align: left;
+    text-align: center;
     white-space: normal;
+    margin-left: auto;
+    margin-right: auto;
   }
 }
 @media (max-width: 600px) {
   .floating-title {
-    left: 2vw;
-    top: 2vw;
     font-size: 10vw;
     max-width: 90vw;
     width: 80vw;
     min-width: 50vw;
-    text-align: left;
+    text-align: center;
     white-space: normal;
+    margin-left: auto;
+    margin-right: auto;
   }
+}
+
+/* --- Ensure title-and-overlays is always at the top and centered --- */
+.title-and-overlays {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  z-index: 3000;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 0;
+  width: 100vw;
+  padding-top: 2.5rem;
+}
+
+.top-overlays {
+  text-align: center;
+  pointer-events: auto;
+  background: none;
+  margin-top: 8px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 16px;
 }
 
 .model-label-overlay {
@@ -117,6 +145,16 @@ canvas {
   max-width: 260px;
   text-align: center;
   pointer-events: none;
+  /* Add word-break for long words */
+  word-break: break-word;
+}
+@media (max-width: 600px) and (orientation: landscape) {
+  .model-label-overlay {
+    bottom: 2vh; /* Move label higher up from bottom */
+    max-width: 90vw;
+    font-size: 0.95em;
+    padding: 0.6em 0.5em;
+  }
 }
 .model-label-overlay.start-modal {
   left: 50%;

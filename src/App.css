@@ -391,7 +391,7 @@ canvas {
   top: 0;
   width: 100vw;
   height: 100vh;
-  background: #44484f;
+  background: var(--color-bg);
   overflow: hidden;
   z-index: 2;
 }
@@ -402,20 +402,26 @@ canvas {
   width: 100vw;
   height: 100vh;
   object-fit: cover;
-  z-index: 3;
   opacity: 1;
-  transition: opacity 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   will-change: opacity;
   pointer-events: none;
-  background: #44484f;
+  background: var(--color-bg);
+}
+.snapshot-img.current {
+  z-index: 4;
+}
+.snapshot-img.next {
+  z-index: 3;
+  opacity: 0;
+  visibility: hidden; /* Hide next image completely until needed */
 }
 .snapshot-img.fade-out {
   opacity: 0;
-  z-index: 4;
 }
 .snapshot-img.fade-in {
   opacity: 1;
-  z-index: 5;
+  visibility: visible; /* Show image when fading in */
 }
 
 @keyframes spin {

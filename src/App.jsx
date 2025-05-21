@@ -349,20 +349,27 @@ function App() {
         const nextSuffix =
           deviceType === "mobile" ? `m${orientation}` : `t${orientation}`;
         const nextImg = `/snapshots/${nextFolder}/stop${nextStop}${nextSuffix}.webp`;
+
+        // First stage: fade out current image only
         setCrossfade({
           prevImg: snapshotImg,
-          nextImg,
+          nextImg: nextImg,
           fading: true,
           direction,
         });
+
+        // After current image fades out, switch to next image
         setTimeout(() => {
           setStop(nextStop);
-          setCrossfade((prev) => ({
-            ...prev,
-            fading: false,
-            prevImg: null,
-          }));
-        }, 600); // match CSS transition
+          // Small delay before starting fade-in of new image
+          setTimeout(() => {
+            setCrossfade((prev) => ({
+              ...prev,
+              fading: false,
+              prevImg: null,
+            }));
+          }, 50); // Small delay for better visual separation
+        }, 400); // Matches CSS transition duration
       } else {
         setStop(nextStop);
       }
@@ -527,20 +534,24 @@ function App() {
         {/* Snapshots for mobile/tablet, 3D model for desktop */}
         {useSnapshotsOnly ? (
           <div className="snapshot-crossfade">
-            {/* Previous image (fade out) */}
-            {crossfade.fading && crossfade.prevImg && (
+            {/* Current image (will fade out) */}
+            {crossfade.prevImg && (
               <img
                 src={crossfade.prevImg}
                 alt=""
-                className={`snapshot-img${crossfade.fading ? " fade-out" : ""}`}
+                className={`snapshot-img current${
+                  crossfade.fading ? " fade-out" : ""
+                }`}
               />
             )}
-            {/* Next image (fade in) */}
+            {/* Next image (hidden until current fades out) */}
             {crossfade.nextImg && (
               <img
                 src={crossfade.nextImg}
                 alt=""
-                className={`snapshot-img${crossfade.fading ? " fade-in" : ""}`}
+                className={`snapshot-img next${
+                  !crossfade.prevImg ? " fade-in" : ""
+                }`}
               />
             )}
             {/* SVG lines overlay, always above images */}

@@ -383,6 +383,72 @@ canvas {
   z-index: 101;
   text-align: center;
 }
+
+/* Crossfade for snapshot images on mobile/tablet */
+.snapshot-crossfade {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  background: var(--color-bg);
+  overflow: hidden;
+  z-index: 2;
+}
+.snapshot-img {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  opacity: 1;
+  transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: opacity;
+  pointer-events: none;
+  background: var(--color-bg);
+}
+.snapshot-img.current {
+  z-index: 4;
+}
+.snapshot-img.next {
+  z-index: 3;
+  opacity: 0;
+  visibility: hidden; /* Hide next image completely until needed */
+}
+.snapshot-img.fade-out {
+  opacity: 0;
+}
+.snapshot-img.fade-in {
+  opacity: 1;
+  visibility: visible; /* Show image when fading in */
+}
+
+.image-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+}
+
+.image.visible {
+  opacity: 1;
+}
+
+.image.hidden {
+  opacity: 0;
+}
+
 @keyframes spin {
   0% {
     transform: rotate(0deg);

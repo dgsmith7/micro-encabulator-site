@@ -13,7 +13,7 @@ import ModelLabel from "./components/ModelLabel";
 import TouchNavControls from "./components/TouchNavControls";
 
 const INITIAL_DESCRIPTION =
-  "An nano-instrument currently used in the operation of microscopic milford trenions.  It not only provides inverse reactive current, for use in unilateral phase detractors, but is also capable of automatically synchronizing cardinal grammeters.  Power is produced by the modial interaction of magneto-reluctance and capacitive diractance.";
+  "An nano-instrument currently used in the operation of microscopic milford trenions.  It not only provides inverse reactive current for use in unilateral phase detractors, but is also capable of automatically synchronizing cardinal grammeters.  Power is produced by the modial interaction of magneto-reluctance and capacitive diractance.";
 
 const INITIAL_STOP = {
   name: "Micro-encabulator",
@@ -29,7 +29,7 @@ const INITIAL_STOP = {
 const STOPS = [
   {
     ...INITIAL_STOP,
-    lineAnchor: "left",
+    lineAnchor: "top",
     line2D: { startX: 120, startY: 400, endX: 220, endY: 300 },
   },
   {
@@ -57,7 +57,7 @@ const STOPS = [
   },
   {
     name: "Ambifacient Lunar Waneshaft",
-    desc: "Transmits inverse reactive current to the 'up' end of the cardinal grammeters with minimal loss.",
+    desc: "Transmits inverse reactive current to the 'up end' of the cardinal grammeters with minimal loss.",
     rotation: [0.2, -Math.PI / 3, 0.1],
     cameraTarget: [0, 0, 0],
     cameraPos: [12, 6, 6],
@@ -68,26 +68,26 @@ const STOPS = [
   },
   {
     name: "Hydrocoptic Marzlevanes",
-    desc: "Six marzlevanes fitted to optimize sinusoidal repleneration and reduce vibrational artifacts when employed in conjunction with a drawn reciprocation dingle arm.",
+    desc: "Six marzlevanes are employed and fitted to optimize sinusoidal repleneration and reduce vibrational artifacts when utilized in conjunction with a drawn reciprocation dingle arm.",
     rotation: [0.7, -0.9, 0.5],
     cameraTarget: [0, -3, 0],
     cameraPos: [0, -10, -12],
     labelPos: { x: 8, y: 8, z: -6 }, // fix: move labelPos to right and up
     lineTo: { x: 0, y: -2, z: -2 },
     modalClass: "marzlevanes-modal",
-    lineAnchor: "bottom",
+    lineAnchor: "top",
     line2D: { startX: 300, startY: 400, endX: 350, endY: 500 },
   },
   {
     name: "Lotus-o-Delta Main Winding",
-    desc: "Panendermic semi-boloid slots house the main winding, enhancing differential girdle spring efficiency.",
+    desc: "Panendermic semi-boloid slots house the main winding, enhancing differential girdle spring efficiency and minimizing oscillation chiming of the dingle arm assembly.",
     rotation: [0.2, Math.PI / 2, -0.2],
     cameraTarget: [0, 2, 0],
     cameraPos: [-8, 8, 8],
     labelPos: { x: 10, y: 0, z: 0 }, // fix: move labelPos to right
     lineTo: { x: 2, y: 0, z: 0 },
     modalClass: "lotus-modal",
-    lineAnchor: "bottom",
+    lineAnchor: "left",
     line2D: { startX: 400, startY: 300, endX: 500, endY: 350 },
   },
   {
@@ -99,7 +99,7 @@ const STOPS = [
     labelPos: { x: -10, y: -2, z: 4 }, // fix: move labelPos left and down
     lineTo: { x: 1, y: -1, z: 1 },
     modalClass: "tremie-modal",
-    lineAnchor: "bottom",
+    lineAnchor: "right",
     line2D: { startX: 120, startY: 500, endX: 200, endY: 600 },
   },
   {
@@ -111,7 +111,7 @@ const STOPS = [
     labelPos: { x: -10, y: 10, z: 0 }, // fix: move labelPos left and up
     lineTo: { x: -50, y: -51, z: -80 },
     modalClass: "grammeters-modal",
-    lineAnchor: "bottom",
+    lineAnchor: "top",
     line2D: { startX: 80, startY: 80, endX: 40, endY: 40 },
   },
 ];
@@ -758,7 +758,7 @@ function App() {
               x2={lineProps.endX}
               y2={lineProps.endY}
               stroke="#fff"
-              strokeWidth="2.5"
+              strokeWidth="2.2"
               strokeLinecap="round"
             />
             <circle

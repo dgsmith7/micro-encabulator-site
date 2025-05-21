@@ -1,5 +1,9 @@
 import React, { useEffect } from "react";
 
+/**
+ * Overlay label/modal for each stop, positioned responsively.
+ * Handles special classes for start, panametric, and landscape modes.
+ */
 function ModelLabel({
   label,
   desc,
@@ -12,19 +16,16 @@ function ModelLabel({
   viewportSize,
   labelPos,
 }) {
-  // We're not using isLandscape directly anymore since we get orientation info from props
-  // but we keep the resize listener to potentially handle other dimension changes
+  // Resize listener is kept for possible future enhancements
   useEffect(() => {
     const handleResize = () => {
-      // Just update if viewport size changes significantly
-      // This could be enhanced later if needed
+      // Placeholder for future responsive logic
     };
-
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // For debugging
+  // Debug logging for development
   useEffect(() => {
     console.log("ModelLabel rendering:", {
       deviceType,
@@ -36,18 +37,16 @@ function ModelLabel({
     });
   }, [deviceType, orientation, viewportSize, labelPos, isStart, modalClass]);
 
-  // Manage label classes for responsive display
+  // Build className string for modal overlay
   let className = "model-label-overlay";
   if (isStart) className += " start-modal";
   if (isPanametric) className += " panametric-modal";
   if (modalClass) className += ` ${modalClass}`;
 
-  // Add landscape class for devices in landscape mode
+  // Add landscape class for mobile devices in landscape or short screens
   const isLandscape =
     orientation === "l" ||
     (viewportSize && viewportSize.width > viewportSize.height);
-
-  // Apply landscape styles for mobile devices in landscape or any device with low height
   if (
     (deviceType === "mobile" && isLandscape) ||
     (viewportSize && viewportSize.height < 500)

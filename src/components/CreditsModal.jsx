@@ -1,8 +1,8 @@
 import React from "react";
 
 /**
- * Modal component showing credits for the project.
- * Appears when user clicks the "credits" link.
+ * Modal component for displaying project credits and attributions.
+ * Appears as an overlay when showCredits is true.
  */
 function CreditsModal({ showCredits, setShowCredits }) {
   if (!showCredits) return null;

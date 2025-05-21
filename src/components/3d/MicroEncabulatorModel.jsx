@@ -3,7 +3,8 @@ import { useGLTF } from "@react-three/drei";
 import * as THREE from "three";
 
 /**
- * Component that renders the 3D model with animations for rotation.
+ * Renders the 3D model and animates its rotation on stop change.
+ * Handles loading state and computes model bounds for camera fitting.
  */
 const MicroEncabulatorModel = React.forwardRef(function MicroEncabulatorModel(
   { onBounds, setLoading, targetRotation, shouldAnimate },
@@ -12,11 +13,11 @@ const MicroEncabulatorModel = React.forwardRef(function MicroEncabulatorModel(
   const { scene } = useGLTF("/scene.gltf");
   const localRef = useRef();
   const modelRef = ref || localRef;
-  // Store current and target quaternions
+  // Store current and target quaternions for smooth rotation
   const startQuat = useRef(new THREE.Quaternion());
   const targetQuat = useRef(new THREE.Quaternion());
 
-  // On mount, set initial quaternion only once (not on every targetRotation change)
+  // On mount, set initial quaternion only once
   useEffect(() => {
     if (modelRef.current && targetRotation) {
       const euler = new THREE.Euler(...targetRotation, "XYZ");
@@ -25,11 +26,11 @@ const MicroEncabulatorModel = React.forwardRef(function MicroEncabulatorModel(
       startQuat.current.copy(quat);
       targetQuat.current.copy(quat);
     }
-    // Only run on mount (scene/modelRef changes), not on every targetRotation change
+    // Only run on mount (scene/modelRef changes)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [modelRef]);
 
-  // Easing function: cubic ease-in-out
+  // Easing function for rotation animation
   function easeInOutCubic(t) {
     return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
   }
@@ -67,12 +68,12 @@ const MicroEncabulatorModel = React.forwardRef(function MicroEncabulatorModel(
     return () => cancelAnimationFrame(frame);
   }, [targetRotation, modelRef, shouldAnimate]);
 
-  // Handle loading state
+  // Set loading to false when model is loaded
   useEffect(() => {
     if (scene && setLoading) setLoading(false);
   }, [scene, setLoading]);
 
-  // Calculate model bounds for camera positioning
+  // Compute model bounds for camera positioning
   useEffect(() => {
     if (scene && modelRef.current && onBounds) {
       const box = new THREE.Box3().setFromObject(modelRef.current);

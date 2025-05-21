@@ -2,11 +2,11 @@ import React from "react";
 import SVGLines from "./SVGLines";
 
 /**
- * Component to handle the display of static images on mobile/tablet devices
- * with smooth crossfade transitions.
+ * Displays a static snapshot image for the current stop (mobile/tablet only),
+ * with crossfade transitions and optional SVG line overlay.
  */
 function SnapshotDisplay({ crossfade, lineProps, stop, snapshotImg }) {
-  // If there's no image to display
+  // If there's no image to display, show fallback message
   if (!snapshotImg) {
     return (
       <div style={{ color: "#fff", textAlign: "center", marginTop: "2em" }}>
@@ -29,7 +29,7 @@ function SnapshotDisplay({ crossfade, lineProps, stop, snapshotImg }) {
         />
       )}
 
-      {/* Fade-out phase: only show the current image, fading out */}
+      {/* Fade-out phase: show current image fading out */}
       {phase === "fade-out" && prev && (
         <img
           src={prev}
@@ -39,7 +39,7 @@ function SnapshotDisplay({ crossfade, lineProps, stop, snapshotImg }) {
         />
       )}
 
-      {/* Fade-in phase: only show the next image, fading in */}
+      {/* Fade-in phase: show next image fading in */}
       {phase === "fade-in" && next && (
         <img
           src={next}

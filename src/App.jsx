@@ -1,4 +1,10 @@
-import React, { useEffect, useRef, useState, useLayoutEffect } from "react";
+import React, {
+  useEffect,
+  useRef,
+  useState,
+  useLayoutEffect,
+  useMemo,
+} from "react";
 import { Canvas, useThree } from "@react-three/fiber";
 import { OrbitControls, useGLTF, Environment } from "@react-three/drei";
 import * as THREE from "three";
@@ -288,6 +294,21 @@ function App() {
   const [animatedCameraTarget, setAnimatedCameraTarget] = useState(
     STOPS[0].cameraTarget
   );
+
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
+
+  const images = useMemo(() => ["image1.jpg", "image2.jpg", "image3.jpg"], []);
+
+  useEffect(() => {
+    images.forEach((src) => {
+      const img = new Image();
+      img.src = src;
+    });
+  }, [images]);
+
+  const handleNextImage = () => {
+    setActiveImageIndex((prevIndex) => (prevIndex + 1) % images.length);
+  };
 
   // Responsive label position for current stop
   const responsiveLabelPos = getResponsiveLabelPos(stopData, canvasSize);
@@ -844,6 +865,19 @@ function App() {
             </div>
           </div>
         )}
+        <div className="image-container">
+          {images.map((src, index) => (
+            <img
+              key={index}
+              src={src}
+              alt="Showcase"
+              className={`image ${
+                index === activeImageIndex ? "visible" : "hidden"
+              }`}
+            />
+          ))}
+        </div>
+        <button onClick={handleNextImage}>Next Image</button>
       </main>
     </div>
   );

@@ -260,8 +260,23 @@ function App() {
 
   // Calculate lineProps for SVG overlay (desktop) or use 2D for mobile/tablet
   let lineProps = null;
-  if (deviceType !== "desktop" && stopData.line2D && stop !== 0) {
-    lineProps = stopData.line2D;
+  if (deviceType !== "desktop" && stop !== 0) {
+    // Device/orientation-specific overrides for mobile/tablet
+    let override = null;
+    if (deviceType === "mobile") {
+      if (orientation === "p" && stopData.line2DMobilePortrait) {
+        override = stopData.line2DMobilePortrait;
+      } else if (orientation === "l" && stopData.line2DMobileLandscape) {
+        override = stopData.line2DMobileLandscape;
+      }
+    } else if (deviceType === "tablet") {
+      if (orientation === "p" && stopData.line2DTabletPortrait) {
+        override = stopData.line2DTabletPortrait;
+      } else if (orientation === "l" && stopData.line2DTabletLandscape) {
+        override = stopData.line2DTabletLandscape;
+      }
+    }
+    lineProps = override || stopData.line2D || null;
   } else if (cameraObj && modalPos && stopData.lineTo) {
     const screen = project3DToScreen(
       new THREE.Vector3(

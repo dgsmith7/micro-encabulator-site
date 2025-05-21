@@ -33,6 +33,10 @@ export const STOPS = [
     lineTo: { x: 2, y: 2, z: 0 },
     lineAnchor: "top",
     line2D: { startX: 200, startY: 180, endX: 300, endY: 100 },
+    line2DMobilePortrait: { startX: 180, startY: 160, endX: 280, endY: 90 },
+    line2DMobileLandscape: { startX: 160, startY: 140, endX: 260, endY: 80 },
+    line2DTabletPortrait: { startX: 220, startY: 200, endX: 320, endY: 120 },
+    line2DTabletLandscape: { startX: 240, startY: 220, endX: 340, endY: 140 },
   },
   {
     name: "Spurving Bearings",
@@ -45,6 +49,10 @@ export const STOPS = [
     modalClass: "spurving-modal",
     lineAnchor: "top",
     line2D: { startX: 100, startY: 220, endX: 60, endY: 100 },
+    line2DMobilePortrait: { startX: 180, startY: 160, endX: 280, endY: 90 },
+    line2DMobileLandscape: { startX: 160, startY: 140, endX: 260, endY: 80 },
+    line2DTabletPortrait: { startX: 220, startY: 200, endX: 320, endY: 120 },
+    line2DTabletLandscape: { startX: 240, startY: 220, endX: 340, endY: 140 },
   },
   {
     name: "Ambifacient Lunar Waneshaft",
@@ -56,6 +64,10 @@ export const STOPS = [
     lineTo: { x: 80, y: 20, z: 130 },
     lineAnchor: "top",
     line2D: { startX: 180, startY: 120, endX: 250, endY: 60 },
+    line2DMobilePortrait: { startX: 180, startY: 160, endX: 280, endY: 90 },
+    line2DMobileLandscape: { startX: 160, startY: 140, endX: 260, endY: 80 },
+    line2DTabletPortrait: { startX: 220, startY: 200, endX: 320, endY: 120 },
+    line2DTabletLandscape: { startX: 240, startY: 220, endX: 340, endY: 140 },
   },
   {
     name: "Hydrocoptic Marzlevanes",
@@ -68,6 +80,10 @@ export const STOPS = [
     modalClass: "marzlevanes-modal",
     lineAnchor: "bottom",
     line2D: { startX: 300, startY: 400, endX: 350, endY: 500 },
+    line2DMobilePortrait: { startX: 180, startY: 160, endX: 280, endY: 90 },
+    line2DMobileLandscape: { startX: 160, startY: 140, endX: 260, endY: 80 },
+    line2DTabletPortrait: { startX: 220, startY: 200, endX: 320, endY: 120 },
+    line2DTabletLandscape: { startX: 240, startY: 220, endX: 340, endY: 140 },
   },
   {
     name: "Lotus-o-Delta Main Winding",
@@ -80,6 +96,10 @@ export const STOPS = [
     modalClass: "lotus-modal",
     lineAnchor: "bottom",
     line2D: { startX: 400, startY: 300, endX: 500, endY: 350 },
+    line2DMobilePortrait: { startX: 180, startY: 160, endX: 280, endY: 90 },
+    line2DMobileLandscape: { startX: 160, startY: 140, endX: 260, endY: 80 },
+    line2DTabletPortrait: { startX: 220, startY: 200, endX: 320, endY: 120 },
+    line2DTabletLandscape: { startX: 240, startY: 220, endX: 340, endY: 140 },
   },
   {
     name: "Non-reversible Tremie Pipe",
@@ -92,6 +112,10 @@ export const STOPS = [
     modalClass: "tremie-modal",
     lineAnchor: "bottom",
     line2D: { startX: 120, startY: 500, endX: 200, endY: 600 },
+    line2DMobilePortrait: { startX: 180, startY: 160, endX: 280, endY: 90 },
+    line2DMobileLandscape: { startX: 160, startY: 140, endX: 260, endY: 80 },
+    line2DTabletPortrait: { startX: 220, startY: 200, endX: 320, endY: 120 },
+    line2DTabletLandscape: { startX: 240, startY: 220, endX: 340, endY: 140 },
   },
   {
     name: "Cardinal Grammeters",
@@ -104,6 +128,10 @@ export const STOPS = [
     modalClass: "grammeters-modal",
     lineAnchor: "bottom",
     line2D: { startX: 80, startY: 80, endX: 40, endY: 40 },
+    line2DMobilePortrait: { startX: 180, startY: 160, endX: 280, endY: 90 },
+    line2DMobileLandscape: { startX: 160, startY: 140, endX: 260, endY: 80 },
+    line2DTabletPortrait: { startX: 220, startY: 200, endX: 320, endY: 120 },
+    line2DTabletLandscape: { startX: 240, startY: 220, endX: 340, endY: 140 },
   },
 ];
 

@@ -63,8 +63,7 @@ function SnapshotDisplay({ crossfade, lineProps, stop, snapshotImg }) {
       {lineProps && stop !== 0 && (
         <SVGLines
           lineProps={lineProps}
-          visible={true}
-          opacity={1}
+          visible={crossfade.phase !== "fade-out"}
           isFixed={false}
         />
       )}

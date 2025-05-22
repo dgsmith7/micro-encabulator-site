@@ -380,6 +380,9 @@ canvas {
 .bottom-overlays .credits-link:hover {
   color: #fff;
 }
+.credits-link {
+  cursor: pointer;
+}
 
 .credits-modal-overlay {
   position: fixed;

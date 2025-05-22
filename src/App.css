@@ -156,7 +156,15 @@ canvas {
   pointer-events: none;
   /* Add word-break for long words */
   word-break: break-word;
+  opacity: 1;
+  transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: opacity;
 }
+
+.model-label-overlay.fade-out {
+  opacity: 0;
+}
+
 @media (max-width: 600px) and (orientation: landscape) {
   .model-label-overlay {
     bottom: 110px; /* Position even higher from bottom */
@@ -586,6 +594,19 @@ canvas {
   100% {
     transform: rotate(360deg);
   }
+}
+
+/* SVG line overlay transitions */
+svg.overlay-lines {
+  opacity: 1;
+  transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: opacity;
+  pointer-events: none;
+}
+
+svg.overlay-lines.fade-out {
+  opacity: 0 !important;
+  visibility: visible;
 }
 
 /* Commented out duplicate/overriding rules */

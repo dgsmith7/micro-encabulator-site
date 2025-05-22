@@ -34,7 +34,7 @@ export const STOPS = [
     lineAnchor: "top",
     line2D: { startX: 200, startY: 180, endX: 300, endY: 100 },
     line2DMobilePortrait: { startX: 200, startY: 600, endX: 210, endY: 400 },
-    line2DMobileLandscape: { startX: 550, startY: 230, endX: 390, endY: 200 },
+    line2DMobileLandscape: { startX: 250, startY: 230, endX: 390, endY: 200 },
     line2DTabletPortrait: { startX: 230, startY: 820, endX: 420, endY: 530 },
     line2DTabletLandscape: { startX: 260, startY: 580, endX: 520, endY: 400 },
   },

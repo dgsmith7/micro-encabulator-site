@@ -15,6 +15,7 @@ function ModelLabel({
   orientation,
   viewportSize,
   labelPos,
+  fade = 1,
 }) {
   // Resize listener is kept for possible future enhancements
   useEffect(() => {
@@ -55,7 +56,7 @@ function ModelLabel({
   }
 
   return (
-    <div className={className} ref={modalRef}>
+    <div className={`${className} ${!fade ? "fade-out" : ""}`} ref={modalRef}>
       <div className="model-label-title">{label}</div>
       <div className="model-label-desc">{desc}</div>
     </div>

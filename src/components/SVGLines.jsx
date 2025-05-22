@@ -4,7 +4,7 @@ import React from "react";
  * Renders a connecting SVG line and endpoints between a label/modal and a model part.
  * Used for both desktop and mobile/tablet overlays.
  */
-function SVGLines({ lineProps, visible = true, opacity = 1, isFixed = false }) {
+function SVGLines({ lineProps, visible = true, isFixed = false }) {
   if (!lineProps) return null;
 
   // SVG is positioned absolutely or fixed, overlays the viewport
@@ -18,15 +18,13 @@ function SVGLines({ lineProps, visible = true, opacity = 1, isFixed = false }) {
     height: "100vh",
   };
 
-  // Add opacity and transition if needed
-  const style = {
-    ...baseStyle,
-    opacity: visible ? opacity : 0,
-    transition: "opacity 1.5s cubic-bezier(.4,0,.2,1)",
-  };
-
   return (
-    <svg style={style} width="100vw" height="100vh">
+    <svg
+      style={baseStyle}
+      width="100vw"
+      height="100vh"
+      className={`overlay-lines ${!visible ? "fade-out" : ""}`}
+    >
       <line
         x1={lineProps.startX}
         y1={lineProps.startY}

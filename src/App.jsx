@@ -104,14 +104,22 @@ function App() {
   const handleTouchNav = (direction) => {
     if (loading || crossfade.fading) return;
     let nextStop = stop;
+
+    // Fade out the current overlay and lines
+    setFade(0);
+
     if (direction === "up") {
       nextStop = stop < STOPS.length - 1 ? stop + 1 : 0;
     } else if (direction === "down") {
       nextStop = stop > 0 ? stop - 1 : STOPS.length - 1;
     }
     if (nextStop !== stop) {
+      // Fade out current overlays
+      setFade(0);
+      setShouldAnimate(false);
+
       if (deviceType !== "desktop") {
-        // Start crossfade
+        // Start crossfade after overlay fade out
         const nextFolder =
           deviceType === "mobile"
             ? `mobile-${orientation}`
@@ -135,6 +143,9 @@ function App() {
               fading: false,
               prevImg: null,
             }));
+            // Fade in the new overlay and lines
+            setFade(1);
+            setShouldAnimate(true);
           }, 50);
         }, 400);
       } else {
@@ -382,15 +393,11 @@ function App() {
           deviceType={deviceType}
           orientation={orientation}
           viewportSize={canvasSize}
+          fade={fade}
         />
         {/* SVG lines overlay for desktop (already handled above for mobile/tablet) */}
         {deviceType === "desktop" && lineProps && stop !== 0 && (
-          <SVGLines
-            lineProps={lineProps}
-            visible={true}
-            opacity={fade}
-            isFixed={true}
-          />
+          <SVGLines lineProps={lineProps} visible={fade === 1} isFixed={true} />
         )}
         {/* Touch controls for mobile/tablet: always above overlays and modal */}
         {isTouchDevice && (

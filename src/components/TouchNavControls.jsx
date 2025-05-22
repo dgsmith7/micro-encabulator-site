@@ -1,6 +1,38 @@
 import React from "react";
 import "../App.css";
 
+/**
+ * TouchNavControls Component
+ *
+ * Provides touch-based navigation interface for mobile and tablet devices.
+ * Designed to be minimal yet highly responsive to user interaction.
+ *
+ * Key Features:
+ * - Custom styled navigation buttons
+ * - Haptic feedback through visual transitions
+ * - High-contrast design for accessibility
+ * - Strategic positioning above other UI elements
+ *
+ * Props:
+ * @param {Function} onNav - Callback for navigation events
+ *                          Takes direction ("up"/"down") as parameter
+ *
+ * Interaction Flow:
+ * 1. User taps button
+ * 2. Visual feedback via CSS transition
+ * 3. Navigation callback triggered
+ * 4. Parent components handle transition effects
+ *
+ * CSS Dependencies:
+ * - .touch-nav-controls: Container styling and positioning
+ * - .touch-nav-btn: Button appearance and transitions
+ * - SVG styling for arrow icons
+ *
+ * Z-Index Layering:
+ * - Container: 10001 (highest level)
+ * - Ensures controls are always accessible
+ */
+
 // Touch navigation controls for mobile/tablet: up/down buttons trigger navigation
 export default function TouchNavControls({ onNav }) {
   return (

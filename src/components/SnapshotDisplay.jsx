@@ -2,6 +2,35 @@ import React from "react";
 import SVGLines from "./SVGLines";
 
 /**
+ * SnapshotDisplay Component
+ *
+ * Manages image-based view system for mobile/tablet devices.
+ * Handles smooth transitions between pre-rendered views.
+ *
+ * Features:
+ * - Device-specific image loading
+ * - Smooth crossfade transitions
+ * - Orientation-aware image selection
+ * - Integration with overlay system
+ *
+ * Props:
+ * @param {Object} crossfade - Controls transition states
+ * @param {Object} lineProps - SVG line positioning data
+ * @param {number} stop - Current view index
+ * @param {string} snapshotImg - Current image path
+ *
+ * State Management:
+ * - Handles loading states
+ * - Manages transition timing
+ * - Coordinates with parent navigation
+ *
+ * CSS Dependencies:
+ * - Image positioning
+ * - Crossfade transitions
+ * - z-index layering
+ */
+
+/**
  * Displays a static snapshot image for the current stop (mobile/tablet only),
  * with crossfade transitions and optional SVG line overlay.
  */

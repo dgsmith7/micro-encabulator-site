@@ -1,4 +1,35 @@
-import React, { useEffect } from "react";
+import React from "react";
+
+/**
+ * ModelLabel Component
+ *
+ * Handles information overlay display and positioning.
+ * Adapts to different device types and orientations.
+ *
+ * Features:
+ * - Responsive positioning system
+ * - Orientation-aware layout adjustments
+ * - Smooth fade transitions
+ * - Accessibility considerations
+ *
+ * Props:
+ * @param {string} label - Title text
+ * @param {string} desc - Description text
+ * @param {boolean} isStart - Special handling for intro state
+ * @param {boolean} isPanametric - Special handling for panametric view
+ * @param {Object} modalRef - Reference for position calculations
+ * @param {string} modalClass - Additional styling classes
+ * @param {Object} deviceType - Current device information
+ * @param {string} orientation - Current device orientation
+ * @param {Object} viewportSize - Current viewport dimensions
+ * @param {number} fade - Controls transition state
+ *
+ * CSS Dependencies:
+ * - Position calculations
+ * - Responsive text sizing
+ * - Fade transitions
+ * - z-index layering
+ */
 
 /**
  * Overlay label/modal for each stop, positioned responsively.
@@ -17,26 +48,7 @@ function ModelLabel({
   labelPos,
   fade = 1,
 }) {
-  // Resize listener is kept for possible future enhancements
-  useEffect(() => {
-    const handleResize = () => {
-      // Placeholder for future responsive logic
-    };
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  // Debug logging for development
-  useEffect(() => {
-    console.log("ModelLabel rendering:", {
-      deviceType,
-      orientation,
-      viewportSize,
-      labelPos,
-      isStart,
-      modalClass,
-    });
-  }, [deviceType, orientation, viewportSize, labelPos, isStart, modalClass]);
+  // Removed debug logging for production
 
   // Build className string for modal overlay
   let className = "model-label-overlay";

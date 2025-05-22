@@ -3,6 +3,40 @@ import { useGLTF } from "@react-three/drei";
 import * as THREE from "three";
 
 /**
+ * MicroEncabulatorModel Component
+ *
+ * Manages the 3D model rendering and animation for desktop view.
+ * Handles model loading, rotation animations, and camera interactions.
+ *
+ * Key Features:
+ * - GLTF model loading and optimization
+ * - Smooth quaternion-based rotation animations
+ * - Automatic bounds calculation for camera fitting
+ * - Loading state management
+ *
+ * Props:
+ * @param {Function} onBounds - Callback for model bounds updates
+ * @param {Function} setLoading - Loading state controller
+ * @param {Array} targetRotation - Desired rotation angles [x,y,z]
+ * @param {boolean} shouldAnimate - Animation enable flag
+ *
+ * Technical Details:
+ * - Uses Three.js for 3D rendering
+ * - Implements custom easing functions
+ * - Handles WebGL context
+ *
+ * Performance Considerations:
+ * - Optimized geometry and textures
+ * - Efficient animation system
+ * - Proper cleanup of 3D resources
+ *
+ * Dependencies:
+ * - three.js
+ * - @react-three/fiber
+ * - @react-three/drei
+ */
+
+/**
  * Renders the 3D model and animates its rotation on stop change.
  * Handles loading state and computes model bounds for camera fitting.
  */

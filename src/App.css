@@ -1,4 +1,41 @@
 /*
+  Micro-Encabulator Site CSS Architecture
+  
+  CSS Dependencies and Structure:
+  1. Global Variables
+     - Colors
+     - Typography
+     - Core measurements
+  
+  2. Base Styles
+     - Root element
+     - App container
+     - Canvas
+  
+  3. Component Styles
+     - ModelLabel
+     - SVG Lines
+     - Touch Controls
+     - Credits Modal
+  
+  4. Responsive Design
+     - Desktop (default)
+     - Tablet (portrait/landscape)
+     - Mobile (portrait/landscape)
+  
+  5. Transitions
+     - Fade animations
+     - Crossfade effects
+     - Touch interaction feedback
+  
+  Note: Critical CSS classes maintain specific z-index layering:
+  - Canvas: z-index 1
+  - Overlays: z-index 10-40
+  - Modal: z-index 1000-2000
+  - Touch controls: z-index 10000-10001
+*/
+
+/*
   Cleanup: Julius Sans One for all text, no !important, modular, clean, minimal CSS.
   - All text uses Julius Sans One
   - No !important
@@ -36,7 +73,6 @@ body,
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: var(--color-bg);
   position: relative;
   overflow: hidden;
 }
@@ -244,14 +280,14 @@ canvas {
   .model-label-overlay.spurving-modal,
   .model-label-overlay.tremie-modal,
   .model-label-overlay.grammeters-modal {
-    bottom: 120px !important;
+    bottom: 120px;
     max-height: 70vh;
     overflow-y: auto;
     background: none;
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
-    z-index: 2000 !important;
-    display: block !important;
-    opacity: 1 !important;
+    z-index: 2000;
+    display: block;
+    opacity: 1;
   }
 
   /* Special handling for start modal in landscape */
@@ -281,16 +317,16 @@ canvas {
 
 /* Specific styles for mobile landscape */
 .model-label-overlay.landscape-mobile {
-  bottom: 120px !important; /* Position higher from bottom */
+  bottom: 120px;
   max-height: 120px;
   overflow-y: auto;
   font-size: 0.8em;
   max-width: 45vw;
   padding: 0.6em 0.8em;
-  display: block !important; /* Ensure it's visible */
-  opacity: 1 !important;
-  z-index: 2000 !important; /* Higher z-index to ensure visibility */
-  background: none; /* No background */
+  display: block;
+  opacity: 1;
+  z-index: 2000;
+  background: none;
   border-radius: 8px;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9); /* Stronger text shadow for better readability */
 }
@@ -408,7 +444,7 @@ canvas {
   right: 0;
   bottom: 0;
   background: rgba(20, 24, 32, 0.75);
-  z-index: 1000;
+  z-index: 20000; /* Above all other UI elements including SVG lines */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -605,7 +641,7 @@ svg.overlay-lines {
 }
 
 svg.overlay-lines.fade-out {
-  opacity: 0 !important;
+  opacity: 0;
   visibility: visible;
 }
 

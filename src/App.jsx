@@ -15,6 +15,38 @@ import SVGLines from "./components/SVGLines";
 import SnapshotDisplay from "./components/SnapshotDisplay";
 
 /**
+ * Main Application Component
+ *
+ * Core Responsibilities:
+ * 1. Device Detection & Adaptation
+ *    - Determines device type (desktop/tablet/mobile)
+ *    - Handles orientation changes
+ *    - Manages progressive enhancement strategy
+ *
+ * 2. State Management
+ *    - Navigation state (current stop, transitions)
+ *    - Camera positions and animations
+ *    - Fade transitions across components
+ *
+ * 3. Layout Coordination
+ *    - Label positioning
+ *    - SVG line connections
+ *    - Touch controls placement
+ *
+ * 4. Performance Optimization
+ *    - Conditional 3D rendering
+ *    - Image sequence management
+ *    - Transition timing
+ *
+ * Critical Dependencies:
+ * - three.js: 3D rendering
+ * - react-three/fiber: React Three.js bindings
+ * - SVGLines: Overlay connection system
+ * - ModelLabel: Information display
+ * - TouchNavControls: Mobile/tablet navigation
+ */
+
+/**
  * Main application component for the Micro-encabulator interactive site.
  * Handles 3D model, snapshot mode, navigation, overlays, and responsive logic.
  */
@@ -60,15 +92,6 @@ function App() {
   const useSnapshotsOnly = isTouchDevice;
 
   // Log device info for debugging
-  useEffect(() => {
-    console.log("App detected:", {
-      deviceType,
-      orientation,
-      isTouchDevice,
-      width: canvasSize.width,
-      height: canvasSize.height,
-    });
-  }, [deviceType, orientation, canvasSize, isTouchDevice]);
 
   // Never show loading spinner for snapshot mode
   useEffect(() => {

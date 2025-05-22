@@ -1,6 +1,38 @@
 import React from "react";
 
 /**
+ * CreditsModal Component
+ *
+ * Overlay modal displaying project credits and attributions.
+ * Appears above all other UI elements when activated.
+ *
+ * Key Features:
+ * - Backdrop with click-to-close functionality
+ * - Responsive layout for all device sizes
+ * - Accessible close button
+ * - External links to credited works
+ *
+ * Props:
+ * @param {boolean} showCredits - Controls modal visibility
+ * @param {Function} setShowCredits - Toggle callback
+ *
+ * Interaction Model:
+ * - Click overlay to close
+ * - Click close button to dismiss
+ * - Modal prevents background interaction
+ *
+ * CSS Dependencies:
+ * - .credits-modal-overlay: Backdrop and positioning
+ * - .credits-modal: Content container styling
+ * - .credits-content: Text formatting
+ * - Link styling and hover states
+ *
+ * Z-Index Layering:
+ * - Overlay: 1000
+ * - Content: 1001
+ */
+
+/**
  * Modal component for displaying project credits and attributions.
  * Appears as an overlay when showCredits is true.
  */

@@ -95,6 +95,14 @@ Replace `YOUR_LOCAL_IP` with your computer's local network IP address.
 
 ## License
 
-This project is for demonstration purposes. See the `LICENSE` file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+### Third Party Content
+
+The 3D model used in this project is licensed under CC-BY-4.0:
+
+- Model: "SCIFI GENERATOR" by Cinnamine3D
+- License: [Creative Commons Attribution 4.0 International](http://creativecommons.org/licenses/by/4.0/)
+- Full attribution and license details can be found in [modelLicense.txt](modelLicense.txt)
 
 # micro-encabulator-site

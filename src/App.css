@@ -444,7 +444,7 @@ canvas {
   right: 0;
   bottom: 0;
   background: rgba(20, 24, 32, 0.75);
-  z-index: 1000;
+  z-index: 20000; /* Above all other UI elements including SVG lines */
   display: flex;
   align-items: center;
   justify-content: center;

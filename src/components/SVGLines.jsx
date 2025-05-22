@@ -1,6 +1,29 @@
 import React from "react";
 
 /**
+ * SVGLines Component
+ *
+ * Renders dynamic connection lines between labels and model parts.
+ * Critical for visual connection between information and 3D model.
+ *
+ * Features:
+ * - Dynamic positioning based on model and label coordinates
+ * - Smooth fade transitions during navigation
+ * - Responsive to device orientation
+ * - Handles both 3D-calculated and preset positions
+ *
+ * Props:
+ * @param {Object} lineProps - Coordinates for line start/end points
+ * @param {boolean} visible - Controls fade transition state
+ * @param {boolean} isFixed - Determines positioning strategy
+ *
+ * CSS Dependencies:
+ * - opacity transitions
+ * - z-index layering
+ * - pointer-events handling
+ */
+
+/**
  * Renders a connecting SVG line and endpoints between a label/modal and a model part.
  * Used for both desktop and mobile/tablet overlays.
  */

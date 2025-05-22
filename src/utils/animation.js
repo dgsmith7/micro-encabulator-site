@@ -1,5 +1,29 @@
 /**
- * Animation utility functions for model and camera transitions.
+ * Animation Utility Functions
+ *
+ * Core animation calculations and helpers for smooth transitions
+ * across all interactive elements.
+ *
+ * Functions:
+ *
+ * easeInOutCubic:
+ * - Provides smooth acceleration and deceleration
+ * - Used for camera movements and UI transitions
+ * - Creates natural-feeling motion
+ *
+ * lerp (Linear Interpolation):
+ * - Calculates intermediate positions
+ * - Used for camera position updates
+ * - Ensures smooth movement between points
+ *
+ * project3DToScreen:
+ * - Converts 3D coordinates to 2D screen space
+ * - Critical for SVG line positioning
+ * - Maintains connections during camera movement
+ *
+ * Usage:
+ * These functions work together to create a cohesive
+ * animation system across the entire application.
  */
 
 /**

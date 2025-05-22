@@ -1,4 +1,32 @@
 /**
+ * Device Detection Utilities
+ *
+ * Handles device type detection and orientation management.
+ * Critical for progressive enhancement strategy.
+ *
+ * Functions:
+ *
+ * getDeviceType:
+ * - Determines device category (desktop/tablet/mobile)
+ * - Uses screen dimensions and touch capability
+ * - Informs rendering strategy selection
+ *
+ * getOrientation:
+ * - Calculates current device orientation
+ * - Handles edge cases and size thresholds
+ * - Triggers appropriate layout adjustments
+ *
+ * Usage:
+ * These utilities drive the core responsive behavior
+ * and ensure optimal performance across devices.
+ *
+ * Dependencies:
+ * - Used by App.jsx for initial setup
+ * - Informs SnapshotDisplay image selection
+ * - Guides ModelLabel positioning
+ */
+
+/**
  * Device detection utilities for responsive UI logic.
  */
 
@@ -7,12 +35,6 @@
  * Uses user agent, screen size, and touch capability.
  */
 export function getDeviceType() {
-  // Force tablet detection for testing - REMOVE THIS AFTER TESTING
-  if (localStorage.getItem("forceTablet") === "true") {
-    console.log("FORCING TABLET MODE FOR TESTING");
-    return "tablet";
-  }
-
   // Check for iPad specifically since newer iPads may not show up in user agent
   const ua = navigator.userAgent || navigator.vendor || window.opera;
   const platform = (navigator.platform || "").toLowerCase();
@@ -34,19 +56,6 @@ export function getDeviceType() {
     (isMacOS && isTouch && smallerDimension >= 768 && largerDimension <= 1366);
   const isMobile = isMobileUA || (isTouch && smallerDimension < 600);
 
-  // Log detection details for debugging
-  console.log("Device detection:", {
-    ua,
-    isTouch,
-    screenSize: `${screenWidth}x${screenHeight}`,
-    smallerDimension,
-    largerDimension,
-    isMobileUA,
-    isTabletUA,
-    isTabletSize,
-    deviceType: isMobile ? "mobile" : isTablet ? "tablet" : "desktop",
-  });
-
   if (isMobile) return "mobile";
   if (isTablet) return "tablet";
   return "desktop";
@@ -57,11 +66,4 @@ export function getDeviceType() {
  */
 export function getOrientation(width, height) {
   return width > height ? "l" : "p";
-}
-
-/**
- * Easing function for animation (duplicate, for convenience).
- */
-export function easeInOutCubic(t) {
-  return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 }

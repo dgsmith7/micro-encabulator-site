@@ -1,4 +1,35 @@
 /**
+ * Stops Data Configuration
+ *
+ * Defines the complete tour sequence through the micro-encabulator.
+ * Contains all positioning, text, and animation data for each stop.
+ *
+ * Data Structure:
+ * Each stop contains:
+ * - name: Feature title
+ * - desc: Feature description
+ * - rotation: 3D model orientation [x,y,z]
+ * - cameraPos: Camera position [x,y,z]
+ * - cameraTarget: Look-at point [x,y,z]
+ * - modalClass: CSS class for positioning
+ * - lineAnchor: SVG line connection point
+ * - lineTo: 3D model connection point
+ *
+ * Special Configurations:
+ * - Mobile/tablet specific line positions
+ * - Orientation-specific adjustments
+ * - Custom modal classes for specific views
+ *
+ * Usage:
+ * - Drives main navigation sequence
+ * - Controls camera animations
+ * - Positions overlays and lines
+ *
+ * Note: Order is critical as it defines the
+ * navigation sequence and transition flow.
+ */
+
+/**
  * This file defines all stop points for the Micro-encabulator tour.
  * Each stop includes camera, label, and line data for the UI.
  */

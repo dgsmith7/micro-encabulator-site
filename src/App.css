@@ -101,6 +101,15 @@ canvas {
     margin-right: auto;
   }
 }
+@media (max-width: 800px) and (orientation: landscape) {
+  .floating-title {
+    max-width: 95vw;
+    width: 95vw;
+    font-size: 1.3em; /* Optional: adjust as needed */
+    white-space: normal;
+    text-align: center;
+  }
+}
 
 /* --- Ensure title-and-overlays is always at the top and centered --- */
 .title-and-overlays {
@@ -150,7 +159,7 @@ canvas {
 }
 @media (max-width: 600px) and (orientation: landscape) {
   .model-label-overlay {
-    bottom: 120px; /* Position even higher from bottom */
+    bottom: 110px; /* Position even higher from bottom */
     max-width: 80vw;
     font-size: 0.85em;
     padding: 0.5em 0.5em;
@@ -170,7 +179,7 @@ canvas {
   .model-label-overlay.spurving-modal,
   .model-label-overlay.tremie-modal,
   .model-label-overlay.grammeters-modal {
-    bottom: 120px;
+    bottom: 110px;
     padding: 0.5em 0.8em;
     max-width: 45vw;
     font-size: 0.8em;
@@ -194,9 +203,9 @@ canvas {
   max-width: 100%;
   text-align: left;
 }
-.model-label-overlay.panametric-modal,
 .model-label-overlay.marzlevanes-modal,
-.model-label-overlay.lotus-modal {
+.model-label-overlay.lotus-modal,
+.model-label-overlay.grammeters-modal {
   right: 7vw;
   left: auto;
   bottom: 10vh;
@@ -206,9 +215,9 @@ canvas {
   max-width: 340px;
   padding: 1em 1.3em;
 }
+.model-label-overlay.panametric-modal,
 .model-label-overlay.spurving-modal,
-.model-label-overlay.tremie-modal,
-.model-label-overlay.grammeters-modal {
+.model-label-overlay.tremie-modal {
   left: 7vw;
   right: auto;
   bottom: 10vh;

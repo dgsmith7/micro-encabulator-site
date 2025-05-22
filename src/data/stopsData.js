@@ -33,10 +33,10 @@ export const STOPS = [
     lineTo: { x: 2, y: 2, z: 0 },
     lineAnchor: "top",
     line2D: { startX: 200, startY: 180, endX: 300, endY: 100 },
-    line2DMobilePortrait: { startX: 180, startY: 160, endX: 280, endY: 90 },
-    line2DMobileLandscape: { startX: 160, startY: 140, endX: 260, endY: 80 },
-    line2DTabletPortrait: { startX: 220, startY: 200, endX: 320, endY: 120 },
-    line2DTabletLandscape: { startX: 240, startY: 220, endX: 340, endY: 140 },
+    line2DMobilePortrait: { startX: 200, startY: 600, endX: 210, endY: 400 },
+    line2DMobileLandscape: { startX: 550, startY: 230, endX: 390, endY: 200 },
+    line2DTabletPortrait: { startX: 230, startY: 820, endX: 420, endY: 530 },
+    line2DTabletLandscape: { startX: 260, startY: 580, endX: 520, endY: 400 },
   },
   {
     name: "Spurving Bearings",
@@ -49,10 +49,10 @@ export const STOPS = [
     modalClass: "spurving-modal",
     lineAnchor: "top",
     line2D: { startX: 100, startY: 220, endX: 60, endY: 100 },
-    line2DMobilePortrait: { startX: 180, startY: 160, endX: 280, endY: 90 },
-    line2DMobileLandscape: { startX: 160, startY: 140, endX: 260, endY: 80 },
-    line2DTabletPortrait: { startX: 220, startY: 200, endX: 320, endY: 120 },
-    line2DTabletLandscape: { startX: 240, startY: 220, endX: 340, endY: 140 },
+    line2DMobilePortrait: { startX: 200, startY: 600, endX: 180, endY: 400 },
+    line2DMobileLandscape: { startX: 260, startY: 230, endX: 370, endY: 200 },
+    line2DTabletPortrait: { startX: 230, startY: 820, endX: 360, endY: 480 },
+    line2DTabletLandscape: { startX: 260, startY: 580, endX: 490, endY: 390 },
   },
   {
     name: "Ambifacient Lunar Waneshaft",
@@ -64,10 +64,10 @@ export const STOPS = [
     lineTo: { x: 80, y: 20, z: 130 },
     lineAnchor: "top",
     line2D: { startX: 180, startY: 120, endX: 250, endY: 60 },
-    line2DMobilePortrait: { startX: 180, startY: 160, endX: 280, endY: 90 },
-    line2DMobileLandscape: { startX: 160, startY: 140, endX: 260, endY: 80 },
-    line2DTabletPortrait: { startX: 220, startY: 200, endX: 320, endY: 120 },
-    line2DTabletLandscape: { startX: 240, startY: 220, endX: 340, endY: 140 },
+    line2DMobilePortrait: { startX: 200, startY: 520, endX: 280, endY: 410 },
+    line2DMobileLandscape: { startX: 380, startY: 230, endX: 500, endY: 210 },
+    line2DTabletPortrait: { startX: 400, startY: 790, endX: 500, endY: 500 },
+    line2DTabletLandscape: { startX: 540, startY: 550, endX: 660, endY: 400 },
   },
   {
     name: "Hydrocoptic Marzlevanes",
@@ -78,12 +78,12 @@ export const STOPS = [
     labelPos: { x: 8, y: 8, z: -6 }, // fix: move labelPos to right and up
     lineTo: { x: 0, y: -2, z: -2 },
     modalClass: "marzlevanes-modal",
-    lineAnchor: "bottom",
+    lineAnchor: "left",
     line2D: { startX: 300, startY: 400, endX: 350, endY: 500 },
-    line2DMobilePortrait: { startX: 180, startY: 160, endX: 280, endY: 90 },
-    line2DMobileLandscape: { startX: 160, startY: 140, endX: 260, endY: 80 },
-    line2DTabletPortrait: { startX: 220, startY: 200, endX: 320, endY: 120 },
-    line2DTabletLandscape: { startX: 240, startY: 220, endX: 340, endY: 140 },
+    line2DMobilePortrait: { startX: 200, startY: 570, endX: 210, endY: 420 },
+    line2DMobileLandscape: { startX: 570, startY: 220, endX: 400, endY: 200 },
+    line2DTabletPortrait: { startX: 550, startY: 790, endX: 390, endY: 500 },
+    line2DTabletLandscape: { startX: 800, startY: 540, endX: 560, endY: 410 },
   },
   {
     name: "Lotus-o-Delta Main Winding",
@@ -94,12 +94,12 @@ export const STOPS = [
     labelPos: { x: 10, y: 0, z: 0 }, // fix: move labelPos to right
     lineTo: { x: 2, y: 0, z: 0 },
     modalClass: "lotus-modal",
-    lineAnchor: "bottom",
+    lineAnchor: "left",
     line2D: { startX: 400, startY: 300, endX: 500, endY: 350 },
-    line2DMobilePortrait: { startX: 180, startY: 160, endX: 280, endY: 90 },
-    line2DMobileLandscape: { startX: 160, startY: 140, endX: 260, endY: 80 },
-    line2DTabletPortrait: { startX: 220, startY: 200, endX: 320, endY: 120 },
-    line2DTabletLandscape: { startX: 240, startY: 220, endX: 340, endY: 140 },
+    line2DMobilePortrait: { startX: 200, startY: 600, endX: 210, endY: 410 },
+    line2DMobileLandscape: { startX: 570, startY: 230, endX: 420, endY: 210 },
+    line2DTabletPortrait: { startX: 550, startY: 820, endX: 400, endY: 520 },
+    line2DTabletLandscape: { startX: 800, startY: 580, endX: 540, endY: 400 },
   },
   {
     name: "Non-reversible Tremie Pipe",
@@ -110,12 +110,12 @@ export const STOPS = [
     labelPos: { x: -10, y: -2, z: 4 }, // fix: move labelPos left and down
     lineTo: { x: 1, y: -1, z: 1 },
     modalClass: "tremie-modal",
-    lineAnchor: "bottom",
+    lineAnchor: "right",
     line2D: { startX: 120, startY: 500, endX: 200, endY: 600 },
-    line2DMobilePortrait: { startX: 180, startY: 160, endX: 280, endY: 90 },
-    line2DMobileLandscape: { startX: 160, startY: 140, endX: 260, endY: 80 },
-    line2DTabletPortrait: { startX: 220, startY: 200, endX: 320, endY: 120 },
-    line2DTabletLandscape: { startX: 240, startY: 220, endX: 340, endY: 140 },
+    line2DMobilePortrait: { startX: 200, startY: 600, endX: 220, endY: 430 },
+    line2DMobileLandscape: { startX: 240, startY: 240, endX: 420, endY: 230 },
+    line2DTabletPortrait: { startX: 220, startY: 820, endX: 440, endY: 520 },
+    line2DTabletLandscape: { startX: 240, startY: 580, endX: 580, endY: 430 },
   },
   {
     name: "Cardinal Grammeters",
@@ -126,12 +126,12 @@ export const STOPS = [
     labelPos: { x: -10, y: 10, z: 0 }, // fix: move labelPos left and up
     lineTo: { x: -50, y: -51, z: -80 },
     modalClass: "grammeters-modal",
-    lineAnchor: "bottom",
+    lineAnchor: "top",
     line2D: { startX: 80, startY: 80, endX: 40, endY: 40 },
-    line2DMobilePortrait: { startX: 180, startY: 160, endX: 280, endY: 90 },
-    line2DMobileLandscape: { startX: 160, startY: 140, endX: 260, endY: 80 },
-    line2DTabletPortrait: { startX: 220, startY: 200, endX: 320, endY: 120 },
-    line2DTabletLandscape: { startX: 240, startY: 220, endX: 340, endY: 140 },
+    line2DMobilePortrait: { startX: 200, startY: 600, endX: 150, endY: 460 },
+    line2DMobileLandscape: { startX: 460, startY: 240, endX: 340, endY: 260 },
+    line2DTabletPortrait: { startX: 550, startY: 820, endX: 320, endY: 570 },
+    line2DTabletLandscape: { startX: 760, startY: 580, endX: 440, endY: 460 },
   },
 ];
 
@@ -146,44 +146,6 @@ export const getResponsiveLabelPos = (stop, size) => {
     height: size.height,
     isLandscape,
   });
-
-  // Handle mobile landscape specifically - move labels to better positions
-  if (size.width < 800 && isLandscape) {
-    // This is for landscape orientation on mobile/small screens
-    const mobileLandscapePositions = {
-      // Start (index 0)
-      0: { x: 0, y: -30, z: 0 }, // Move up even more in Y-axis for better visibility
-      // Panametric Fan (index 1)
-      1: { x: 10, y: -30, z: 0 }, // Move up even more in Y-axis
-      // Spurving Bearings (index 2)
-      2: { x: -10, y: -30, z: 0 }, // Move up even more in Y-axis
-      // Ambifacient Lunar Waneshaft (index 3)
-      3: { x: -2, y: -30, z: 0 }, // Move up even more in Y-axis
-      // Hydrocoptic Marzlevanes (index 4)
-      4: { x: 8, y: -30, z: -6 }, // Move up even more in Y-axis
-      // Lotus-o-Delta Main Winding (index 5)
-      5: { x: 10, y: -30, z: 0 }, // Move up even more in Y-axis
-      // Non-reversible Tremie Pipe (index 6)
-      6: { x: -10, y: -30, z: 4 }, // Move up even more in Y-axis
-      // Cardinal Grammeters (index 7)
-      7: { x: -10, y: -30, z: 0 }, // Move up even more in Y-axis
-    };
-
-    // Get the stop index if it exists in the custom positions
-    const stopIndex = STOPS.findIndex(
-      (s) => s.name === stop.name || JSON.stringify(s) === JSON.stringify(stop)
-    );
-
-    console.log("Mobile landscape position:", {
-      stopIndex,
-      foundPosition:
-        stopIndex >= 0 ? mobileLandscapePositions[stopIndex] : null,
-    });
-
-    if (stopIndex >= 0 && mobileLandscapePositions[stopIndex]) {
-      return mobileLandscapePositions[stopIndex];
-    }
-  }
 
   // Example breakpoints (customize as needed)
   if (size.width < 600) {

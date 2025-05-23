@@ -16,16 +16,13 @@ import SnapshotDisplay from "./components/SnapshotDisplay";
 
 /**
  * Asset Path Strategy:
- * - Uses absolute paths for all assets (/snapshots/...)
- * - Paths automatically resolve correctly in both environments:
- *   1. Development: http://localhost:5173/snapshots/...
- *   2. Production: https://[username].github.io/micro-encabulator-site/snapshots/...
- *
- * Environment-specific Path Resolution:
- * - Local Development: Vite serves from root (/)
- * - GitHub Pages: Base path (/micro-encabulator-site/) automatically prepended
- * - No manual path manipulation needed - handled by Vite's base configuration
+ * - Uses Vite's BASE_URL for environment-aware path resolution of all assets
+ * - Development: BASE_URL = "/" -> "/snapshots/..."
+ * - Production: BASE_URL = "/micro-encabulator-site/" -> "/micro-encabulator-site/snapshots/..."
  */
+
+// Get base URL for asset paths
+const base = import.meta.env.BASE_URL;
 
 /**
  * Main Application Component
@@ -105,7 +102,8 @@ function App() {
   if (snapshotFolder) {
     const stopSuffix =
       deviceType === "mobile" ? `m${orientation}` : `t${orientation}`;
-    snapshotImg = `/snapshots/${snapshotFolder}/stop${stop}${stopSuffix}.webp`;
+    snapshotImg =
+      base + `snapshots/${snapshotFolder}/stop${stop}${stopSuffix}.webp`;
   }
 
   // Crossfade logic for mobile/tablet
@@ -145,7 +143,8 @@ function App() {
             : `tablet-${orientation}`;
         const nextSuffix =
           deviceType === "mobile" ? `m${orientation}` : `t${orientation}`;
-        const nextImg = `/snapshots/${nextFolder}/stop${nextStop}${nextSuffix}.webp`;
+        const nextImg =
+          base + `snapshots/${nextFolder}/stop${nextStop}${nextSuffix}.webp`;
 
         setCrossfade({
           prevImg: snapshotImg,

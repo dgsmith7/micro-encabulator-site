@@ -105,4 +105,6 @@ The 3D model used in this project is licensed under CC-BY-4.0:
 - License: [Creative Commons Attribution 4.0 International](http://creativecommons.org/licenses/by/4.0/)
 - Full attribution and license details can be found in [modelLicense.txt](modelLicense.txt)
 
-# micro-encabulator-site
+# micro-encabulator-site on gut hub pages
+
+https://<your-github-username>.github.io/micro-encabulator-site/

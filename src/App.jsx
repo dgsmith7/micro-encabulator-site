@@ -15,35 +15,31 @@ import SVGLines from "./components/SVGLines";
 import SnapshotDisplay from "./components/SnapshotDisplay";
 
 /**
+ * Asset Path Strategy:
+ * - Uses absolute paths for all assets (/snapshots/...)
+ * - Paths automatically resolve correctly in both environments:
+ *   1. Development: http://localhost:5173/snapshots/...
+ *   2. Production: https://[username].github.io/micro-encabulator-site/snapshots/...
+ *
+ * Environment-specific Path Resolution:
+ * - Local Development: Vite serves from root (/)
+ * - GitHub Pages: Base path (/micro-encabulator-site/) automatically prepended
+ * - No manual path manipulation needed - handled by Vite's base configuration
+ */
+
+/**
  * Main Application Component
  *
- * Core Responsibilities:
- * 1. Device Detection & Adaptation
- *    - Determines device type (desktop/tablet/mobile)
- *    - Handles orientation changes
- *    - Manages progressive enhancement strategy
+ * Asset Path Strategy:
+ * - Uses absolute paths for all assets (/snapshots/...)
+ * - Paths automatically resolve correctly in both environments:
+ *   1. Development: http://localhost:5173/snapshots/...
+ *   2. Production: https://[username].github.io/micro-encabulator-site/snapshots/...
  *
- * 2. State Management
- *    - Navigation state (current stop, transitions)
- *    - Camera positions and animations
- *    - Fade transitions across components
- *
- * 3. Layout Coordination
- *    - Label positioning
- *    - SVG line connections
- *    - Touch controls placement
- *
- * 4. Performance Optimization
- *    - Conditional 3D rendering
- *    - Image sequence management
- *    - Transition timing
- *
- * Critical Dependencies:
- * - three.js: 3D rendering
- * - react-three/fiber: React Three.js bindings
- * - SVGLines: Overlay connection system
- * - ModelLabel: Information display
- * - TouchNavControls: Mobile/tablet navigation
+ * Environment-specific Path Resolution:
+ * - Local Development: Vite serves from root (/)
+ * - GitHub Pages: Base path (/micro-encabulator-site/) automatically prepended
+ * - No manual path manipulation needed - handled by Vite's base configuration
  */
 
 /**
@@ -350,6 +346,19 @@ function App() {
 
   // Determine modalClass for current stop
   const modalClass = stopData.modalClass || undefined;
+
+  // Add error handler for Three.js errors
+  useEffect(() => {
+    const handleError = (error) => {
+      console.error("Three.js Error:", error);
+      if (error.target?.tagName === "IMG" || error.target instanceof Image) {
+        console.error("Asset loading error:", error.target.src);
+      }
+    };
+
+    window.addEventListener("error", handleError);
+    return () => window.removeEventListener("error", handleError);
+  }, []);
 
   return (
     <div className="app-container">

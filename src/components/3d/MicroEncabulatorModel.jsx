@@ -5,35 +5,15 @@ import * as THREE from "three";
 /**
  * MicroEncabulatorModel Component
  *
- * Manages the 3D model rendering and animation for desktop view.
- * Handles model loading, rotation animations, and camera interactions.
+ * Asset Loading Strategy:
+ * - Uses absolute path ("/scene.gltf") for compatibility with both:
+ *   1. Local development server (resolves to http://localhost:5173/scene.gltf)
+ *   2. GitHub Pages deployment (resolves to https://[username].github.io/micro-encabulator-site/scene.gltf)
  *
- * Key Features:
- * - GLTF model loading and optimization
- * - Smooth quaternion-based rotation animations
- * - Automatic bounds calculation for camera fitting
- * - Loading state management
- *
- * Props:
- * @param {Function} onBounds - Callback for model bounds updates
- * @param {Function} setLoading - Loading state controller
- * @param {Array} targetRotation - Desired rotation angles [x,y,z]
- * @param {boolean} shouldAnimate - Animation enable flag
- *
- * Technical Details:
- * - Uses Three.js for 3D rendering
- * - Implements custom easing functions
- * - Handles WebGL context
- *
- * Performance Considerations:
- * - Optimized geometry and textures
- * - Efficient animation system
- * - Proper cleanup of 3D resources
- *
- * Dependencies:
- * - three.js
- * - @react-three/fiber
- * - @react-three/drei
+ * Path Resolution:
+ * - Local Dev: Vite base = "/" -> /scene.gltf
+ * - Production: Vite base = "/micro-encabulator-site/" -> /micro-encabulator-site/scene.gltf
+ * - Vite automatically prepends the base URL in production builds
  */
 
 /**
@@ -44,7 +24,10 @@ const MicroEncabulatorModel = React.forwardRef(function MicroEncabulatorModel(
   { onBounds, setLoading, targetRotation, shouldAnimate },
   ref
 ) {
-  const { scene } = useGLTF("/scene.gltf");
+  const { scene } = useGLTF("/scene.gltf", undefined, (error) => {
+    console.error("Error loading 3D model:", error);
+    setLoading(false);
+  });
   const localRef = useRef();
   const modelRef = ref || localRef;
   // Store current and target quaternions for smooth rotation

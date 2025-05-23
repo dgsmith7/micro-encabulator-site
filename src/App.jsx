@@ -189,25 +189,49 @@ function App() {
   // Fade logic on scroll: fade out, change stop, fade in
   useEffect(() => {
     let timeout;
+    let lastScrollTime = 0;
+    const scrollDelay = 500; // Minimum time between scrolls (ms)
+    const scrollThreshold = 20; // Minimum scroll delta to trigger navigation
+    const fadeOutDuration = 400; // Match the CSS transition duration
+
     const onWheel = (e) => {
       e.preventDefault();
       if (loading) return;
+
+      const now = Date.now();
+      if (now - lastScrollTime < scrollDelay) {
+        return; // Ignore scroll events that happen too quickly
+      }
+
+      // Only process scroll if the delta is above our threshold
+      if (Math.abs(e.deltaY) < scrollThreshold) {
+        return;
+      }
+
       let nextStop = stop;
       if (e.deltaY > 0) {
         nextStop = stop < STOPS.length - 1 ? stop + 1 : 0;
       } else if (e.deltaY < 0) {
         nextStop = stop > 0 ? stop - 1 : STOPS.length - 1;
       }
+
       if (nextStop !== stop) {
+        lastScrollTime = now;
         setFade(0);
         setShouldAnimate(false);
+
+        // Wait for fade out to complete before changing stop
         timeout = setTimeout(() => {
           setStop(nextStop);
-          setFade(1);
-          setShouldAnimate(true);
-        }, 250);
+          // Wait a frame before starting fade in
+          requestAnimationFrame(() => {
+            setFade(1);
+            setShouldAnimate(true);
+          });
+        }, fadeOutDuration);
       }
     };
+
     window.addEventListener("wheel", onWheel, { passive: false });
     return () => {
       window.removeEventListener("wheel", onWheel);
@@ -419,8 +443,12 @@ function App() {
           fade={fade}
         />
         {/* SVG lines overlay for desktop (already handled above for mobile/tablet) */}
-        {deviceType === "desktop" && lineProps && stop !== 0 && (
-          <SVGLines lineProps={lineProps} visible={fade === 1} isFixed={true} />
+        {deviceType === "desktop" && lineProps && (
+          <SVGLines
+            lineProps={lineProps}
+            visible={fade === 1 && stop !== 0}
+            isFixed={true}
+          />
         )}
         {/* Touch controls for mobile/tablet: always above overlays and modal */}
         {isTouchDevice && (

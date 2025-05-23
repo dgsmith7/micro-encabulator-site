@@ -6,14 +6,14 @@ import * as THREE from "three";
  * MicroEncabulatorModel Component
  *
  * Asset Loading Strategy:
- * - Uses absolute path ("/scene.gltf") for compatibility with both:
- *   1. Local development server (resolves to http://localhost:5173/scene.gltf)
- *   2. GitHub Pages deployment (resolves to https://[username].github.io/micro-encabulator-site/scene.gltf)
+ * - Uses Vite's BASE_URL for environment-aware path resolution:
+ *   1. Local development: BASE_URL = "/" -> "/scene.gltf"
+ *   2. GitHub Pages: BASE_URL = "/micro-encabulator-site/" -> "/micro-encabulator-site/scene.gltf"
  *
  * Path Resolution:
- * - Local Dev: Vite base = "/" -> /scene.gltf
- * - Production: Vite base = "/micro-encabulator-site/" -> /micro-encabulator-site/scene.gltf
- * - Vite automatically prepends the base URL in production builds
+ * - Uses import.meta.env.BASE_URL to get the correct base path for each environment
+ * - Automatically handles path differences between development and production
+ * - Ensures proper loading in both local dev server and GitHub Pages deployment
  */
 
 /**
@@ -24,7 +24,8 @@ const MicroEncabulatorModel = React.forwardRef(function MicroEncabulatorModel(
   { onBounds, setLoading, targetRotation, shouldAnimate },
   ref
 ) {
-  const { scene } = useGLTF("/scene.gltf", undefined, (error) => {
+  const modelPath = import.meta.env.BASE_URL + "scene.gltf";
+  const { scene } = useGLTF(modelPath, undefined, (error) => {
     console.error("Error loading 3D model:", error);
     setLoading(false);
   });
